@@ -1,0 +1,188 @@
+body {
+	overflow: hidden;
+}
+
+body > span {
+	display: none;
+}
+
+body > button {
+	width: 5%;
+	height: 5%;
+	position: fixed;
+	z-index: 10;
+	background: rgba(0, 0, 0, 0);
+	border-color: rgba(0, 0, 0, 0);
+	color: #505C67;
+	font-size: 18px;
+	outline: none;
+}
+
+nav {
+	width: 30%;
+	height: 100%;
+	position: absolute;
+	z-index: 5;
+	background-color: white;
+	border: solid 5px #505C67;
+	display: grid;
+	grid-template-rows: 1fr 9fr;
+	grid-template-areas: "header"
+						 "tabBlock";
+}
+
+nav h1 {
+	grid-area: header;
+	font-size: 30px;
+	display: grid;
+	align-items: center;	/* vertical */
+	text-align: center;  	/* horizontal */
+	color: #505C67;
+}
+
+.tabBlock {
+	height: 100%;
+	grid-area: tabBlock;
+	display: grid;
+	grid-template-rows: 1fr 14fr;
+	grid-template-areas: "tabBtn"
+						 "tabContent";
+}
+
+/* ----- TAB SETTING ----- */
+
+.tabBtn {
+	grid-area: tabBtn;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.tabBtn a {
+	background-color: #505C67;
+	border-top: solid 10px #505C67;
+	padding: 2% 0;
+	text-decoration: none;
+	font-size: 20px;
+	color: white;
+	display: grid;
+	align-items: center;
+	text-align: center;	
+}
+
+/* first render to basic background color */
+span:target ~ nav .tabBlock .tabBtn a:first-of-type {
+	background-color: #505C67;
+	font-weight: normal;
+	color: white;
+}
+
+/* highlight target or default target */
+span ~ nav .tabBlock .tabBtn a:first-of-type,
+#compareTab:target ~ nav .tabBlock .tabBtn a[href="#compareTab"],
+#searchTab:target ~ nav .tabBlock .tabBtn a[href="#searchTab"] {
+	background-color: white;
+	font-weight: bold;
+	color: #505C67;
+}
+
+/* highlight when hover */
+span ~ nav .tabBlock .tabBtn a:hover,
+#compareTab:target ~ nav .tabBlock .tabBtn a:hover,
+#searchTab:target ~ nav .tabBlock .tabBtn a:hover {
+	text-decoration: none;
+	background-color: #6F7982;
+	color: white;
+}
+
+/* ----- CONTENT SETTING ----- */
+
+.tabContent {
+	grid-area: tabContent; 
+	overflow: scroll;
+}
+
+.tabContent > div {
+	display: none;
+}
+
+.compareController, .searchController {
+	height: 100%;
+}
+
+/* first render to basic setting */
+span:target ~ nav .tabBlock .tabContent > div:first-of-type {
+	display: none;
+}
+
+/* highlight target or default target */
+span ~ nav .tabBlock .tabContent > div:first-of-type,
+#compareTab:target ~ nav .tabBlock .tabContent .compareController,
+#searchTab:target ~ nav .tabBlock .tabContent .searchController {
+	display: block;
+}
+
+/* ----- CONTROLLER SETTING ----- */
+
+.controlTitleBlock {
+	background-color: #505C67;
+	margin: 5% 2% 0 2%;
+	padding: 2%;
+	border-radius: 10px;
+	font-size: 18px;
+	color: white;
+	text-align: center;
+	cursor: pointer;
+}
+
+.controlTitleBlock:hover {
+	background-color: #6F7982;
+}
+
+.controlContentBlock {
+	background-color: #E2E5E7;
+	margin: 1% 4%;
+	padding: 2%;
+	border-radius: 10px;
+}
+
+/* icon button */
+.controlContentBlock span {
+	border: 0;
+	color: #505C67;
+	background-color: rgba(0, 0, 0, 0);
+	display: grid;
+	align-items: center;
+	text-align: center;
+}
+
+.controlContentBlock span:hover {
+	color: #FCB0B3;
+	cursor: pointer;
+}
+
+.controlContentBlock .notHover:hover {
+	color: #505C67;
+	cursor: default;
+}
+
+.controlContentBlock ol {
+	display: grid;
+	grid-template-columns: 9fr 1fr;
+	grid-row-gap: 1px;
+	margin: 0;
+	padding-left: 10%;
+}
+
+#compare-manage ol {
+	grid-template-columns: 8fr 1fr 1fr;
+}
+
+#search-input {
+	display: grid;
+	grid-template-columns: 9fr 1fr;
+}
+
+#search-input input {
+	margin: 0 3%;
+}
+

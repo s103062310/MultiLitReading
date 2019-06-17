@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+	<!-- tab setting -->
+	<span id="compareTab"></span>
+	<span id="searchTab"></span>
+
+	<!-- control board button -->
+	<button type="button" id="controlBtn" onclick="toggleControlBoard()">
+		<span class="glyphicon glyphicon-align-justify"></span>
+	</button>
+
+	<!-- control board -->
+	<nav>
+
+		<!-- system header -->
+		<h1>多文本對讀工具</h1>
+
+		<div class="tabBlock">
+
+			<!-- tab button -->
+			<div class="tabBtn">
+				<a href="#compareTab">對讀</a>
+				<a href="#searchTab">檢索</a>
+			</div>
+
+			<!-- tab content -->
+			<div class="tabContent">
+
+				<!-- compare control -->
+				<div class="compareController">
+					<div class="controlTitleBlock" id="compare-load">載入資料</div>
+
+					<div class="controlTitleBlock" onclick="collapse('#compare-manage')">文本管理</div>
+					<div class="controlContentBlock" id="compare-manage">
+						<ol>
+						</ol>
+					</div>
+
+					<div class="controlTitleBlock" onclick="collapse('#compare-metadataSetting')">文件對讀設定</div>
+					<div class="controlContentBlock" id="compare-metadataSetting">
+						<ol>
+						</ol>
+					</div>
+
+					<div class="controlTitleBlock" onclick="collapse('#compare-alignSetting')">段落對讀設定</div>
+					<div class="controlContentBlock" id="compare-alignSetting">
+						<ol>
+						</ol>
+					</div>
+				</div>
+
+				<!-- search control -->
+				<div class="searchController">
+					<div class="controlTitleBlock" onclick="collapse('#search-input')">全文檢索</div>
+					<div class="controlContentBlock" id="search-input">
+						<input type="text" name="searchQuery">
+						<span class="glyphicon glyphicon-search" onclick="search(this.parentElement.firstElementChild.value)"></span>
+					</div>
+
+					<div class="controlTitleBlock" onclick="collapse('#search-display')">顯示文本</div>
+					<div class="controlContentBlock" id="search-display">
+						<ol>
+						</ol>
+					</div>
+
+					<div class="controlTitleBlock" onclick="collapse('#search-mode')">結構類型</div>
+					<div class="controlContentBlock" id="search-mode">
+						<ol>
+							<li>文件順序</li><span class="glyphicon glyphicon-pushpin notHover"></span>
+							<li>錨點類別</li><span class="glyphicon glyphicon-retweet" onclick="displaySearchMode('Term')"></span>
+						</ol>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</nav>
+
+	<!-- compare interface -->
+	<div class="compareInterface">
+
+		<!-- corpus name -->
+		<div class="compareTitleBlock">
+			<h1>文本名稱</h1>
+		</div>
+
+		<!-- corpus content -->
+		<div class="compareContentBlock">
+			<div class="corpusBlock">
+				<div>
+					<div>
+						<div class="titleBlock">
+							<span class="docuCompareBtn">文件標題</span>
+							<span class="glyphicon glyphicon-chevron-up" onclick="collapseMetadata('metadata', this)"></span>
+						</div>
+
+						<div class="metadataBlock" key="metadata">
+							<li class="metadata1 pinned">metadata1: 1</li>
+							<li class="metadata2">metadata2: 2</li>
+						</div>
+
+						<div class="textBlock">內文1</div>
+						<div class="textBlock">內文2</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- search interface -->
+	<div class="searchInterface">
+
+		<!-- corpus name -->
+		<h1>檢索結果</h1>
+
+		<!-- search content -->
+		<div class="searchContentBlock">
+
+			<!-- search analysis -->
+			<div class="searchAnalysis">
+				<h2>文件順序</h2>
+
+				<div class="titleBlock" onclick="collapse('.searchInterface div[name=blocktoggle]')">
+					<span>文件標題</span><span>5</span>
+				</div>
+
+				<div class="textBlock" name="blocktoggle">
+					<div><span>區塊1</span><span>2</span></div>
+					<div><span>區塊2</span><span>3</span></div>
+				</div>
+			</div>
+
+			<!-- search result -->
+			<div class="searchResult">
+				<div class="titleBlock">
+					<span>文件標題</span>
+				</div>
+				<div class="textBlock">
+					<span class="glyphicon glyphicon-chevron-left"></span>
+					<span>內文1</span>
+				</div>
+				<div class="textBlock">
+					<span class="glyphicon glyphicon-chevron-left"></span>
+					<span>內文2</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+<head>
+	<title>多文本對讀工具</title>
+
+	<!-- JQUERY -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+
+	<!-- DOCUSKY WIDGET API -->
+	<script src="https://docusky.org.tw/docusky/js/jquery.min.js"></script>
+	<script src="https://docusky.org.tw/docusky/js/jquery-ui.min.js"></script>
+	<script src="https://docusky.org.tw/docusky/js.ui/docusky.ui.getDbCorpusDocumentsSimpleUI.js"></script>
+
+	<!-- JAVASCRIPT FILE -->
+	<script src="js/globalVar.js"></script>
+	<script src="js/initialize.js"></script>
+	<script src="js/dataProcess.js"></script>
+	<script src="js/interaction.js"></script>
+	<script src="js/checkergetter.js"></script>
+	<script src="js/display.js"></script>
+
+	<!-- CSS FILE -->
+	<link href="css/main-style.css" type="text/css" rel="stylesheet">
+	<link href="css/control-style.css" type="text/css" rel="stylesheet">
+	<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+</html>

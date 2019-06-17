@@ -1,0 +1,226 @@
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	position: relative;
+	margin: 0 auto;
+}
+
+/* ----- SWITCH INTERFACE ----- */
+
+.compareInterface, .searchInterface {
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+/* first render to basic setting */
+span:target ~ div:first-of-type {
+	display: none;
+}
+
+/* highlight target or default target */
+span ~ div:first-of-type,
+#compareTab:target ~ .compareInterface,
+#searchTab:target ~ .searchInterface {
+	display: block;
+}
+
+/* ----- COMMON SETTING ----- */
+.titleBlock {
+	margin: 2% 2% 0 2%;
+	padding: 1%;
+	border-radius: 10px;
+	font-size: 20px;
+	color: white;
+	display: grid;
+	align-items: center;
+	text-align: center;
+}
+
+.textBlock {
+	margin: 1% 4%;
+	padding: 1%;
+	border-radius: 10px;
+}
+
+.metadataBlock {
+	margin: 1% 4%;
+	padding: 1%;
+	border-radius: 10px;
+	background-color: #7D95AD;
+	color: white;
+}
+
+.metadataBlock ul {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.metadataBlock .pinned {
+	color: #FCECC9;
+}
+
+.term {
+	background-color: #C45B59;
+	color: white;
+	padding: 3px;
+	margin: 5px;
+	line-height: 30px;
+}
+
+.tagged:hover {
+	color: #505C67;
+}
+
+/* ----- COMPARE INTERFACE ----- */
+
+.compareTitleBlock {
+	width: 100%;
+	height: 10%;
+	margin: 0;
+	background-color: #617E9B;
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	grid-column-gap: 1%;
+}
+
+.compareTitleBlock h1 {
+	margin: 0;
+	color: white;
+	display: grid;
+	align-items: center;
+	text-align: center;
+}
+
+.compareContentBlock {
+	width: 100%;
+	height: 90%;
+	background-color: #617E9B;
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	grid-column-gap: 1%;
+}
+
+.corpusBlock {
+	background-color: white;
+	overflow: scroll;
+}
+
+.compareInterface .titleBlock {
+	background-color: #617E9B;
+	display: grid;
+	grid-template-columns: 9fr 1fr;
+	cursor: pointer;
+}
+
+.compareInterface .titleBlock:hover {
+	background-color: #7D95AD;
+}
+
+.compareInterface .titleBlock .glyphicon:hover {
+	color: #DFE7EE;
+}
+
+.compareInterface .textBlock {
+	background-color: #DFE7EE;
+}
+
+.compareInterface .textBlock:hover {
+	background-color: #C5D0DA;
+	cursor: pointer;
+}
+
+.compareInterface .textBlock[idForAlign="undefined"]:hover {
+	background-color: #DFE7EE;
+	cursor: default;
+}
+
+/* ----- SEARCH INTERFACE ----- */
+
+.searchInterface > h1 {
+	width: 100%;
+	height: 10%;
+	margin: 0;
+	background-color: #628475;
+	color: white;
+	display: grid;
+	align-items: center;
+	text-align: center;
+}
+
+.searchContentBlock {
+	width: 100%;
+	height: 90%;
+	background-color: #628475;
+	display: grid;
+	grid-template-columns: 3fr 7fr;
+	grid-column-gap: 1%;
+}
+
+.searchAnalysis, .searchResult {
+	background-color: white;
+	overflow: scroll;
+}
+
+.searchAnalysis h2 {
+	text-align: center;
+	color: #628475;
+}
+
+.searchResult .titleBlock {
+	background-color: #628475;
+}
+
+.searchResult .textBlock {
+	background-color: #DCE5E1;
+	display: grid;
+	grid-template-columns: 1fr 19fr;
+}
+
+.searchResult .glyphicon {
+	display: grid;
+	align-items: center;
+	text-align: center;
+	cursor: pointer;
+}
+
+.searchResult .glyphicon:hover {
+	color: #628475;
+}
+
+.searchAnalysis span {
+	display: grid;
+	align-items: center;
+	text-align: center;
+}
+
+.searchAnalysis .titleBlock {
+	background-color: #628475;
+	display: grid;
+	grid-template-columns: 9fr 1fr;
+	cursor: pointer;
+}
+
+.searchAnalysis .titleBlock:hover {
+	background-color: #7E9A8E;
+}
+
+.searchAnalysis .textBlock {
+	background-color: #DCE5E1;
+}
+
+.searchAnalysis .textBlock div {
+	display: grid;
+	grid-template-columns: 9fr 1fr;
+	border-bottom: 1px dashed #8F979E;
+	cursor: pointer;
+}
+
+.searchAnalysis .textBlock div:hover {
+	background-color: #C8D1CD;
+}
+
+
