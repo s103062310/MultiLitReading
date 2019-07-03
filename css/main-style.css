@@ -8,9 +8,17 @@ body {
 	margin: 0 auto;
 }
 
+p {
+	text-indent: 2em;
+}
+
+img {
+	width: 100%;
+}
+
 /* ----- SWITCH INTERFACE ----- */
 
-.compareInterface, .searchInterface {
+.compareInterface, .searchInterface, .explainInterface {
 	width: 100%;
 	height: 100%;
 	display: none;
@@ -24,7 +32,8 @@ span:target ~ div:first-of-type {
 /* highlight target or default target */
 span ~ div:first-of-type,
 #compareTab:target ~ .compareInterface,
-#searchTab:target ~ .searchInterface {
+#searchTab:target ~ .searchInterface,
+#explainTab:target ~ .explainInterface {
 	display: block;
 }
 
@@ -201,11 +210,11 @@ span ~ div:first-of-type,
 	background-color: #628475;
 	display: grid;
 	grid-template-columns: 9fr 1fr;
-	cursor: pointer;
 }
 
 .searchAnalysis .titleBlock:hover {
 	background-color: #7E9A8E;
+	cursor: pointer;
 }
 
 .searchAnalysis .textBlock {
@@ -215,12 +224,85 @@ span ~ div:first-of-type,
 .searchAnalysis .textBlock div {
 	display: grid;
 	grid-template-columns: 9fr 1fr;
-	border-bottom: 1px dashed #8F979E;
+	border-bottom: 1px dashed #628475;
 	cursor: pointer;
 }
 
 .searchAnalysis .textBlock div:hover {
 	background-color: #C8D1CD;
 }
+
+/* ----- EXPLAIN INTERFACE ----- */
+
+.explainInterface > h1 {
+	width: 100%;
+	height: 10%;
+	margin: 0;
+	background-color: #756F63;
+	color: white;
+	display: grid;
+	align-items: center;
+	text-align: center;
+}
+
+.explainContentBlock {
+	width: 100%;
+	height: 90%;
+	background-color: #756F63;
+	display: grid;
+	grid-template-columns: 2fr 8fr;
+	grid-column-gap: 1%;
+}
+
+.explainTable, .explainContent {
+	background-color: white;
+	overflow: scroll;
+}
+
+.explainInterface h2 {
+	text-align: center;
+	color: #756F63;
+}
+
+.explainInterface h3, .explainInterface h4 {
+	text-align: center;
+}
+
+.explainTable .titleBlock {
+	background-color: #756F63;
+}
+
+.explainTable .titleBlock:hover {
+	background-color: #817C71;
+	cursor: pointer;
+}
+
+.explainTable .textBlock {
+	background-color: #CCCAC6;
+}
+
+.explainTable .textBlock h4 {
+	border-bottom: 1px dashed #756F63;
+	padding: 3px;
+	margin: 0;
+	align-items: center;
+	text-align: center;
+}
+
+.explainTable .textBlock h4:hover {
+	background-color: #BAB8B4;
+	cursor: pointer;
+}
+
+.explainContent > div {
+	margin: 0 2%;
+}
+
+.textandimage {
+	display: grid;
+	place-items: center;
+	grid-template-columns: 4fr 6fr;
+}
+
 
 

@@ -6,6 +6,7 @@
 	<!-- tab setting -->
 	<span id="compareTab"></span>
 	<span id="searchTab"></span>
+	<span id="explainTab"></span>
 
 	<!-- control board button -->
 	<button type="button" id="controlBtn" onclick="toggleControlBoard()">
@@ -24,6 +25,7 @@
 			<div class="tabBtn">
 				<a href="#compareTab">對讀</a>
 				<a href="#searchTab">檢索</a>
+				<a href="#explainTab">說明</a>
 			</div>
 
 			<!-- tab content -->
@@ -150,6 +152,364 @@
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<!-- explain interface -->
+	<div class="explainInterface">
+
+		<!-- tab name -->
+		<h1>使用說明</h1>
+
+		<!-- explain content -->
+		<div class="explainContentBlock">
+
+			<!-- table of content -->
+			<div class="explainTable">
+				<h2>目錄</h2>
+
+				<div class="titleBlock" onclick="jumpToSection('.explainContent h2[key=工具介紹]')">工具介紹</div>
+
+				<div class="titleBlock" onclick="jumpToSection('.explainContent h2[key=控制板]')">控制板</div>
+
+				<div class="titleBlock" onclick="jumpToSection('.explainContent h2[key=對讀介面]')">對讀介面</div>
+				<div class="textBlock">
+					<h4 onclick="jumpToSection('.explainContent div[key=載入資料]')">載入資料</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=文本管理]')">文本管理</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=文件對讀設定]')">文件對讀設定</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=段落對讀設定]')">段落對讀設定</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=介面簡述]')">介面簡述</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=文件標題區塊]')">文件標題區塊</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=詮釋資料區塊]')">詮釋資料區塊</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=段落內文區塊]')">段落內文區塊</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=對讀功能]')">對讀功能</h4>
+				</div>
+
+				<div class="titleBlock" onclick="jumpToSection('.explainContent h2[key=檢索介面]')">檢索介面</div>
+				<div class="textBlock">
+					<h4 onclick="jumpToSection('.explainContent div[key=全文檢索]')">全文檢索</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=顯示文本]')">顯示文本</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=結構類型]')">結構類型</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=介面簡述]')">介面簡述</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=檢索結果結構]')">檢索結果結構</h4>
+					<h4 onclick="jumpToSection('.explainContent div[key=檢索結果呈現]')">檢索結果呈現</h4>
+				</div>
+
+				<div class="titleBlock" onclick="jumpToSection('.explainContent h2[key=文件製作]')">文件製作</div>
+				<div class="textBlock">
+					<h4 onclick="jumpToSection('.explainContent h3[key=MARKUS]')">MARKUS</h4>
+				</div>
+			</div>
+
+			<!-- content -->
+			<div class="explainContent">
+
+				<h2 key="工具介紹">工具介紹</h2>
+				<hr width="96%">
+				<div>
+					<p>在人文研究上，舉凡歷史、文學、宗教，均不乏對文本交叉閱讀的需求，我們稱此舉動為<font style="color: #C45B59; font-weight: bold;">「對讀」</font>。透過資訊技術，可以將不同文本並排在同個頁面、點選以快速檢視相應段落，來達到降低紙本對讀繁瑣性的目的。此工具提供了兩種多文本間的對讀功能：</p>
+					<ul>
+						<li><strong>文件間的對讀：</strong>使用文件附帶的 Metadata 作為對照依據來連結多份文件。</li>
+						<li><strong>段落間的對讀：</strong>將使用者在文件內容中標註的相應段落連結起來。</li>
+					</ul>
+				</div>
+
+				<br><br>
+
+				<h2 key="控制板">控制板</h2>
+				<hr width="96%">
+				<div class="textandimage">
+					<div>
+						<p>為一可收納的區塊，實現介面的切換與各種功能的設定。控制板如右圖所示：</p>
+						<ol>
+							<li>控制板主體，根據各頁面顯示可以設定的功能</li>
+							<li>控制板收合按鈕</li>
+							<li>頁面切換標籤</li>
+						</ol>
+						<p>各介面的控制板功能詳述於各介面的介紹。</p>
+					</div>
+					<div><img src="images/controlboard.jpeg"></div>
+				</div>
+
+				<br><br>
+
+				<h2 key="對讀介面">對讀介面</h2>
+				<hr width="96%">
+				<div class="textandimage">
+
+					<div key="載入資料">
+						<h3>載入資料</h3>
+						<br>
+						<p>從 DocuSky 上載入資料，步驟如下：</p>
+						<ol>
+							<li>點選載入資料，<font style="color: #C45B59; font-weight: bold;">須先登入 DocuSky 帳號。</font></li>
+							<li>選擇要匯入的資料庫 (DocuXML)。</li>
+							<li>點選載入，將資料匯入工具。</li>
+						</ol>
+					</div>
+					<div><img src="images/loaddata.jpeg"></div>
+
+					<div key="文本管理">
+						<h3>文本管理</h3>
+						<br>
+						<p>可對載入的文本做管理。</p>
+						<ol>
+							<li>功能標題，可收合相應區塊。</li>
+							<li>顯示工具上所有的文本 (corpus)。</li>
+							<li><strong>眼睛圖標：</strong>文本的顯示或隱藏按鈕。</li>
+							<li><strong>垃圾桶圖標：</strong>刪除文本按鈕。</li>
+						</ol>
+					</div>
+					<div><img src="images/corpusmanage.jpeg"></div>
+
+					<div key="文件對讀設定">
+						<h3>文件對讀設定</h3>
+						<br>
+						<p>在文件間對讀中，<font style="color: #C45B59; font-weight: bold;">Metadata</font> 被當作對照依據，用來連結多份文件。</p>
+						<ol>
+							<li>功能標題，可收合相應區塊。</li>
+							<li>顯示工具上所有文件 Metadata 的聯集。</li>
+							<li><strong>圖釘圖標：</strong>目前被選定並作為文件間對讀依據的 Metadata。</li>
+							<li><strong>雙箭號圖標：</strong>切換文件間對讀依據的按鈕。</li>
+						</ol>
+					</div>
+					<div><img src="images/metasetting.jpeg"></div>
+
+					<div key="段落對讀設定">
+						<h3>段落對讀設定</h3>
+						<br>
+						<p>在段落間對讀中，使用者可依照自身需求標註對讀文本。以同樣標準進行標註的文本是為同一種 <font style="color: #C45B59; font-weight: bold;">Align Type</font>，工具允許相同文本有不同 Align Type 的標註。</p>
+						<ol>
+							<li>功能標題，可收合相應區塊。</li>
+							<li>顯示工具上所有文件 Metadata 的聯集。</li>
+							<li><strong>圖釘圖標：</strong>目前被選定並作為文件間對讀依據的 Metadata。</li>
+							<li><strong>雙箭號圖標：</strong>切換文件間對讀依據的按鈕。</li>
+						</ol>
+					</div>
+					<div><img src="images/alignsetting.jpeg"></div>
+
+					<div key="介面簡述">
+						<h3>介面簡述</h3>
+						<br>
+						<p>對於每個文本 (corpus) ，皆擁有獨立的一欄來顯示文本內容，包括：</p>
+						<ol>
+							<li>文本名稱 (corpus name)。</li>
+							<li>文件標題區塊 (title block)。</li>
+							<li>詮釋資料區塊 (metadata block)。</li>
+							<li>段落內文區塊 (text block)。</li>
+						</ol>
+						<p>將分述如下。</p>
+					</div>
+					<div><img src="images/compare.jpeg"></div>
+
+					<div key="文件標題區塊">
+						<h3>文件標題區塊</h3>
+						<br>
+						<p>標示文件的開頭，每份文件皆有一個。</p>
+						<ol>
+							<li><strong>文件標題：</strong>除了顯示標題外也是文件間對讀的觸發按鈕。</li>
+							<li><strong>箭號圖標：</strong>詮釋資料區塊收合按鈕。</li>
+						</ol>
+					</div>
+					<div><img src="images/titleBlock.jpeg"></div>
+
+					<div key="詮釋資料區塊">
+						<h3>詮釋資料區塊</h3>
+						<br>
+						<p>顯示文件的所有 Metadata，每份文件皆有一個。</p>
+						<ol>
+							<li><strong>黃字：</strong>目前被選定並作為文件間對讀依據的 Metadata。</li>
+							<li><strong>白字：</strong>其他 Metadata。</li>
+						</ol>
+					</div>
+					<div><img src="images/metaBlock.jpeg"></div>
+
+					<div key="段落內文區塊">
+						<h3>段落內文區塊</h3>
+						<br>
+						<p>顯示文件的內文，根據使用者的標註，每份文件可能有多個。每個段落包括：</p>
+						<ol>
+							<li><strong>段落標籤 (Term)：</strong>為此段落的簡短描述，使用者有標註才會顯示。</li>
+							<li><strong>段落內文：</strong>除了顯示內文外也是段落間對讀的觸發按鈕。</li>
+						</ol>
+					</div>
+					<div><img src="images/textBlock.jpeg"></div>
+
+					<div key="對讀功能">
+						<h3>對讀功能</h3>
+						<br>
+						<p>採多對多模式，區塊可依顏色分成三種，功能分述於下：</p>
+						<ol>
+							<li><strong>藍色 - 一般的預設區塊：</strong>點擊後尋找對應的區塊並標示。</li>
+							<li><strong>黃色 - 正在對讀中的區塊：</strong>點擊後切換成閱讀目標。</li>
+							<li><strong>紅色 - 對讀中正在閱讀的區塊：</strong>點擊後尋找下一個閱讀目標</li>
+						</ol>
+					</div>
+					<div><img src="images/comparing.png"></div>
+				</div>
+
+				<br><br>
+
+				<h2 key="檢索介面">檢索介面</h2>
+				<hr width="96%">
+				<div class="textandimage">
+					
+					<div key="全文檢索">
+						<h3>全文檢索</h3>
+						<br>
+						<p>提供簡易檢索功能，方便使用者在工具上的文本中快速找到所需資料。</p>
+						<ol>
+							<li>功能標題，可收合相應區塊。</li>
+							<li><strong>輸入欄位：</strong>在此輸入檢索詞。</li>
+							<li><strong>放大鏡圖標：</strong>開始檢索按鈕。</li>
+						</ol>
+					</div>
+					<div><img src="images/keyword.jpeg"></div>
+
+					<div key="顯示文本">
+						<h3>顯示文本</h3>
+						<br>
+						<p>預設上，一次顯示一個文本的檢索結果，故提供切換文本的功能。</p>
+						<ol>
+							<li>功能標題，可收合相應區塊。</li>
+							<li>顯示工具上所有的文本。</li>
+							<li><strong>圖釘圖標：</strong>目前被選定並顯示檢索結果的文本。</li>
+							<li><strong>雙箭號圖標：</strong>切換欲檢索文本的按鈕。</li>
+						</ol>
+					</div>
+					<div><img src="images/searchcorpus.jpeg"></div>
+
+					<div key="結構類型">
+						<h3>結構類型</h3>
+						<br>
+						<p>可選擇檢索結果在結構上將如何呈現。</p>
+						<ol>
+							<li>功能標題，可收合相應區塊。</li>
+							<li>目前提供兩種結構類型：文件順序、標籤種類。</li>
+							<li><strong>圖釘圖標：</strong>目前被選定的結構類型。</li>
+							<li><strong>雙箭號圖標：</strong>切換結構類型的按鈕。</li>
+						</ol>
+					</div>
+					<div><img src="images/mode.jpeg"></div>
+
+					<div key="介面簡述">
+						<h3>介面簡述</h3>
+						<br>
+						<p>檢索對象 (corpus) 顯示在上方標題列，檢索介面主要分成兩大區塊：</p>
+						<ol>
+							<li>左側的檢索結果結構。</li>
+							<li>右側的檢索結果呈現。</li>
+						</ol>
+					</div>
+					<div><img src="images/search.jpeg"></div>
+
+					<div key="檢索結果結構">
+						<h3>檢索結果結構</h3>
+						<br>
+						<p>將檢索結果條目以選擇的結構類型進行整理。</p>
+						<ol>
+							<li>所選擇的結構類型。</li>
+							<li>依據結構類型分類的第一層，可能是章節標題或是段落標籤內容 (Term)。</li>
+							<li>依據結構類型分類的第二層，段落區塊的識別，格式為「Align Type。RefId。Key。</li>
+							<li>在此段落/章節中檢索詞的數量。</li>
+						</ol>
+					</div>
+					<div><img src="images/analysis.jpeg"></div>
+
+					<div key="檢索結果呈現">
+						<h3>檢索結果呈現</h3>
+						<br>
+						<p>列出所有含有檢索詞的區塊。</p>
+						<ol>
+							<li>依據結構類型分類的第一層，可能是章節標題或是段落標籤內容 (Term)。</li>
+							<li>依據結構類型分類的第二層，段落區塊的內文。</li>
+							<li><strong>箭號圖標：</strong>返回對讀按鈕，可跳轉至此段落在對讀介面中對讀的狀況。</li>
+							<li>檢索詞醒目標示。</li>
+						</ol>
+					</div>
+					<div><img src="images/searchresult.jpeg"></div>
+				</div>
+
+				<br><br>
+
+				<h2 key="文件製作">文件製作</h2>
+				<hr width="96%">
+				<div>
+					<p>此工具專為「對讀」需求所開發，故要求特定格式。目前可使用 MARKUS 進行製作，步驟分述如下。</p>
+					
+					<h3 key="MARKUS">MARKUS</h3>
+					<div class="textandimage">
+
+						<div>
+							<h4>Step 1</h4>
+							<p>準備好要對讀的文本純文字檔 (.txt)。</p>
+						</div>
+						<div></div>
+
+						<div>
+							<h4>Step 2</h4>
+							<p>開啟 MARKUS 頁面並<font style="color: #C45B59; font-weight: bold;">登入帳號</font>。</p>
+						</div>
+						<div><img src="images/markus-step2.jpeg"></div>
+
+						<div>
+							<h4>Step 3</h4>
+							<p>上傳文件。</p>
+						</div>
+						<div><img src="images/markus-step3.jpeg"></div>
+
+						<div>
+							<h4>Step 4</h4>
+							<p>選擇 <font style="color: #C45B59; font-weight: bold;">2.b 自訂標籤</font>。</p>
+						</div>
+						<div><img src="images/markus-step4.jpeg"></div>
+
+						<div>
+							<h4>Step 5</h4>
+							<p>新增自訂標籤。</p>
+						</div>
+						<div><img src="images/markus-step5.jpeg"></div>
+
+						<div>
+							<h4>Step 6</h4>
+							<p>標籤取名需有<font style="color: #C45B59; font-weight: bold;">「Align.」</font>的前綴。</p>
+						</div>
+						<div><img src="images/markus-step6.jpeg"></div>
+
+						<div>
+							<h4>Step 7</h4>
+							<p>開始標註段落，並填寫 ID。</p>
+						</div>
+						<div><img src="images/markus-step7.jpeg"></div>
+
+						<div>
+							<h4>Step 8</h4>
+							<p>標註完畢後匯出 <font style="color: #C45B59; font-weight: bold;">.html</font> 檔。</p>
+						</div>
+						<div><img src="images/markus-step8.jpeg"></div>
+
+						<div>
+							<h4>Step 9</h4>
+							<p>使用 DocuSky 平台上的 <a href="https://docusky.org.tw/DocuSky/docuTools/MarkusConverter/Markus2DocuXml.html">MARKUS to DocuSky Converter</a> 轉換成 DocuXML 格式。</p>
+						</div>
+						<div></div>
+
+						<div>
+							<h4>Step 10</h4>
+							<p>建庫到 <a href="http://docusky.org.tw/DocuSky/ds-01.home.html">DocuSky</a> 平台上。</p>
+						</div>
+						<div></div>
+
+						<div>
+							<h4>Step 11</h4>
+							<p>匯入工具後即可開始對讀。</p>
+						</div>
+						<div></div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+
 	</div>
 
 </body>

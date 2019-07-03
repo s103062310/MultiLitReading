@@ -54,7 +54,7 @@ nav h1 {
 .tabBtn {
 	grid-area: tabBtn;
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: repeat(3, 1fr);
 }
 
 .tabBtn a {
@@ -79,7 +79,8 @@ span:target ~ nav .tabBlock .tabBtn a:first-of-type {
 /* highlight target or default target */
 span ~ nav .tabBlock .tabBtn a:first-of-type,
 #compareTab:target ~ nav .tabBlock .tabBtn a[href="#compareTab"],
-#searchTab:target ~ nav .tabBlock .tabBtn a[href="#searchTab"] {
+#searchTab:target ~ nav .tabBlock .tabBtn a[href="#searchTab"],
+#explainTab:target ~ nav .tabBlock .tabBtn a[href="#explainTab"] {
 	background-color: white;
 	font-weight: bold;
 	color: #505C67;
@@ -88,7 +89,8 @@ span ~ nav .tabBlock .tabBtn a:first-of-type,
 /* highlight when hover */
 span ~ nav .tabBlock .tabBtn a:hover,
 #compareTab:target ~ nav .tabBlock .tabBtn a:hover,
-#searchTab:target ~ nav .tabBlock .tabBtn a:hover {
+#searchTab:target ~ nav .tabBlock .tabBtn a:hover,
+#explainTab:target ~ nav .tabBlock .tabBtn a:hover {
 	text-decoration: none;
 	background-color: #6F7982;
 	color: white;
@@ -114,10 +116,11 @@ span:target ~ nav .tabBlock .tabContent > div:first-of-type {
 	display: none;
 }
 
-/* highlight target or default target */
+/* display content or default content */
 span ~ nav .tabBlock .tabContent > div:first-of-type,
 #compareTab:target ~ nav .tabBlock .tabContent .compareController,
-#searchTab:target ~ nav .tabBlock .tabContent .searchController {
+#searchTab:target ~ nav .tabBlock .tabContent .searchController,
+#explainTab:target ~ nav .tabBlock .tabContent .explainController {
 	display: block;
 }
 

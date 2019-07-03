@@ -75,7 +75,7 @@ function moveAnchor($id, $key, $corpusName) {
 		cleanContentBlockColor('.compareInterface');
 		changeContentBlockColor('.textBlock[idForAlign=\"' + $id + '\"]', _color.highlightblock);
 		changeContentBlockColor('.compareInterface .textBlock[key=' + $key + ']', _color.highlighttarget);
-		scrollTo('.corpusBlock[name=\"' + $corpusName + '\"]', '.textBlock[key=' + $key + ']');
+		scrollTo('.corpusBlock[name=\"' + $corpusName + '\"]', '.textBlock[key=' + $key + ']', true);
 
 		// scan all other corpus
 		var corpusArray = $('.corpusBlock');
@@ -90,7 +90,7 @@ function moveAnchor($id, $key, $corpusName) {
 				if (blocks.length > 0) {
 					let targetKey = $(blocks[0]).attr('key');
 					changeContentBlockColor('.compareInterface .textBlock[key=' + targetKey + ']', _color.highlighttarget);
-					scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.textBlock[key=' + targetKey + ']');
+					scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.textBlock[key=' + targetKey + ']', true);
 				}
 			}
 		}
@@ -100,7 +100,7 @@ function moveAnchor($id, $key, $corpusName) {
 		cleanContentBlockColor('.corpusBlock[name=\"' + $corpusName + '\"]');
 		changeContentBlockColor('.corpusBlock[name=\"' + $corpusName + '\"] .textBlock[idForAlign=\"' + $id + '\"]', _color.highlightblock);
 		changeContentBlockColor('.compareInterface .textBlock[key=' + $key + ']', _color.highlighttarget);
-		scrollTo('.corpusBlock[name=\"' + $corpusName + '\"]', '.textBlock[key=' + $key + ']');
+		scrollTo('.corpusBlock[name=\"' + $corpusName + '\"]', '.textBlock[key=' + $key + ']', true);
 
 	// click on red block: find next block
 	} else if (clickObj[0].className === 'textBlock tagged tagged') {
@@ -126,8 +126,8 @@ function moveAnchor($id, $key, $corpusName) {
 						let index = (j + 1) % blocks.length;
 						let nextTargetKey = $(blocks[index]).attr('key');
 						changeContentBlockColor('.compareInterface .textBlock[key=' + nextTargetKey + ']', _color.highlighttarget);
-						scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.textBlock[key=' + nextTargetKey + ']');
-						scrollTo('.corpusBlock[name=\"' + $corpusName + '\"]', '.textBlock[key=' + $key + ']');
+						scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.textBlock[key=' + nextTargetKey + ']', true);
+						scrollTo('.corpusBlock[name=\"' + $corpusName + '\"]', '.textBlock[key=' + $key + ']', true);
 
 						break;
 					}
@@ -171,7 +171,7 @@ function moveDocument($key, $corpusName) {
 				if (blocks.length > 0) {
 					let targetKey = $(blocks[0]).attr('key');
 					changeContentBlockColor('.titleBlock[key=' + targetKey + ']', _color.highlighttargetdark);
-					scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.titleBlock[key=' + targetKey + ']');
+					scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.titleBlock[key=' + targetKey + ']', true);
 				}
 			}
 		}
@@ -206,7 +206,7 @@ function moveDocument($key, $corpusName) {
 						let index = (j + 1) % blocks.length;
 						let nextTargetKey = $(blocks[index]).attr('key');
 						changeContentBlockColor('.titleBlock[key=' + nextTargetKey + ']', _color.highlighttargetdark);
-						scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.titleBlock[key=' + nextTargetKey + ']');
+						scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.titleBlock[key=' + nextTargetKey + ']', true);
 
 						break;
 					}
@@ -227,7 +227,7 @@ function jumpToBlock($key) {
 	cleanContentBlockColor('.searchInterface');
 
 	// move
-	scrollTo('.searchResult', '.searchResult .textBlock[key=' + $key + ']');
+	scrollTo('.searchResult', '.searchResult .textBlock[key=' + $key + ']', true);
 
 	// update color
 	changeContentBlockColor('.searchInterface .textBlock[key=' + $key + ']', _color.highlightblock);
@@ -236,11 +236,20 @@ function jumpToBlock($key) {
 
 
 /* ---
+main - explain - scroll to correspond section based on clicked block key
+INPUT: string, selector of clicked object (unique)
+--- */
+function jumpToSection($selector) {
+	scrollTo('.explainContent', $selector, false);
+}
+
+
+/* ---
 main - scroll animation
 INPUT: 1) string, selector of where need to scroll
 	   2) string, selector of target that want to scroll to
 --- */
-function scrollTo($rangeSelector, $selector) {
+function scrollTo($rangeSelector, $selector, $shift) {
 
 	// find corpus block
 	var range = $($rangeSelector);
@@ -249,7 +258,7 @@ function scrollTo($rangeSelector, $selector) {
 	var originRelativePosition = $(range[0].firstElementChild).offset().top;
 	var relativePosition = $($selector).offset().top;
 	var absolutePosition = relativePosition - originRelativePosition;
-	var offset = $('.corpusBlock')[0].offsetHeight / 3;
+	var offset = ($shift) ?$($rangeSelector)[0].offsetHeight / 3 :0;
 
 	// move
 	$($rangeSelector).animate({
@@ -323,8 +332,8 @@ function deleteCorpus($corpusName) {
 
 	var firstCorpus = getFirstCorpus();
 	var firstAlignType = getFirstAlignType();
-	if (firstCorpus === 'error') alert("Error in get first corpus.");
-	if (firstAlignType === 'error') alert("Error in get first align type.");
+	//if (firstCorpus === 'error') alert("Error in get first corpus.");
+	//if (firstAlignType === 'error') alert("Error in get first align type.");
 
 	displayDocuManager();
 	displayMetadataList('docFilename');

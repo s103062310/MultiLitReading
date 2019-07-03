@@ -133,9 +133,11 @@ OUTPUT: string, align type
 --- */
 function getFirstAlignType() {
 	var corpusName = getFirstCorpus();
-	for (let item in _dataset[corpusName][0]) {
-		if (item === 'metadata' || item === 'systemdata') continue;
-		return item;
+	if (corpusName !== 'error') {
+		for (let item in _dataset[corpusName][0]) {
+			if (item === 'metadata' || item === 'systemdata') continue;
+			return item;
+		}
 	}
 	return 'error';
 }

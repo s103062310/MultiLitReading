@@ -59,11 +59,11 @@ function displayAlignTypeList($activeAlignType) {
 
 	// show each anchor type
 	for (let anchor in alignTypeList) {
-		let anchorName = alignTypeList[anchor];
-		let alignSetting = "<li>" + anchorName + "</li>";
-		if ($activeAlignType === anchorName) {
+		let alignType = alignTypeList[anchor];
+		let alignSetting = "<li>" + alignType + "</li>";
+		if ($activeAlignType === alignType) {
 			alignSetting += "<span class=\"glyphicon glyphicon-pushpin notHover\"></span>";
-		} else alignSetting += "<span class=\"glyphicon glyphicon-retweet\" onclick=\"changeAlignType('" + anchorName + "')\"></span>";
+		} else alignSetting += "<span class=\"glyphicon glyphicon-retweet\" onclick=\"changeAlignType('" + alignType + "')\"></span>";
 		$(".controlContentBlock[id=compare-alignSetting] > ol").append(alignSetting);
 	}
 

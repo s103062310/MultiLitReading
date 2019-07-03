@@ -43,6 +43,11 @@ function Color() {
 	this.searchtitlehover = '#7E9A8E';	// dark-medium-green
 	this.searchtexthover = '#C8D1CD';	// light-medium-green
 	this.searchtext = '#DCE5E1';		// light-green
+
+	this.explaintitle = '#756F63';		// dark-brown
+	this.explaintitlehover = '#817C71';	// dark-medium-brown
+	this.explaintexthover = '#BAB8B4';	// light-medium-brown
+	this.explaintext = '#CCCAC6';		// light-brown
 }
 
 

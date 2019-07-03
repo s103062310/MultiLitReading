@@ -145,7 +145,9 @@ function parseDocuContent($docuContent) {
 	
 	// store for text that don't have align tag
 	var temp = [];
-	for (let j in anchorNames) temp[anchorNames[j]] = '';
+	for (let j in anchorNames) {
+		temp[anchorNames[j]] = '';
+	}
 
 	//console.log($docuContent);
 
@@ -184,7 +186,7 @@ function parseDocuContent($docuContent) {
 
 					// if there are texts before Align tag, create new block for them
 					if (temp[tagInfo.Type].length > 0) {
-						parsed.push({tagInfo: new Tag({tagName: 'AlignBegin', Type: tagInfo.Type}), isWrite: false, content: temp});
+						parsed.push({tagInfo: new Tag({tagName: 'AlignBegin', Type: tagInfo.Type}), isWrite: false, content: temp[tagInfo.Type]});
 						temp[tagInfo.Type] = '';
 					}
 
@@ -194,7 +196,7 @@ function parseDocuContent($docuContent) {
 				// AlignEnd - close align tag that has correspond key
 				} else if (tagInfo.tagName === 'AlignEnd') {
 					for (let j in parsed) {
-						if (parsed[j].tagInfo.Key == tagInfo.Key) {
+						if (parsed[j].tagInfo.Key === tagInfo.Key) {
 							parsed[j].isWrite = false;
 							break;
 						}
@@ -242,10 +244,10 @@ function parseDocuContent($docuContent) {
 	// see if there is remaining text
 	for (let type in temp) {
 		if (temp[type].length > 0) 
-			parsed.push({tagInfo: new Tag({tagName: 'AlignBegin', Type: type}), isWrite: false, content: temp});
+			parsed.push({tagInfo: new Tag({tagName: 'AlignBegin', Type: type}), isWrite: false, content: temp[type]});
 	}
 	
-	//console.log(parsed);
+	// console.log(parsed);
 
 	return parsed;
 }
