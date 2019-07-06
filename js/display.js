@@ -215,10 +215,8 @@ function displaySearchResult($corpusName, $results, $query) {
 	$(".searchInterface > h1").empty();
 	$(".searchResult").empty();
 
-	// change title
-	$(".searchInterface > h1").append("檢索結果 ｜ " + $corpusName);
-
 	// common var
+	var keywordNum = 0;
 	var resultBlocks = "";
 	var keyword = new RegExp($query, 'g');
 	var backBtn = "<span class=\"glyphicon glyphicon-chevron-left\" onclick=\"backToCompare(this.parentElement)\"></span>";
@@ -233,12 +231,16 @@ function displaySearchResult($corpusName, $results, $query) {
 		for (let i in $results[doc]) {
 			let blockText = $results[doc][i].blockContent.replace(keyword, "<font style='background-color: " + _color.highlighttarget + ";'>"+$query+"</font>");
 			let anchorKey = $results[doc][i].tagInfo.Key;
-			let textBlock = "<div class=\"textBlock\" key=\"" + anchorKey + "\">" + backBtn + "<span>" + blockText + "</span></div>"
+			let textBlock = "<div class=\"textBlock\" key=\"" + anchorKey + "\">" + backBtn + "<span>" + blockText + "</span></div>";
 			resultBlocks += textBlock;
+			keywordNum += $results[doc][i].blockContent.match(keyword).length;
 		}
 	}
 
 	$(".searchResult").append(resultBlocks);
+
+	// change title
+	$(".searchInterface > h1").append("檢索結果 ｜ " + $corpusName + " | " + keywordNum);
 
 }
 

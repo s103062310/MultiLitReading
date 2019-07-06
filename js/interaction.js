@@ -274,7 +274,7 @@ function scrollTo($rangeSelector, $selector, $shift) {
 control board - compare - load button, load data from docusky
 --- */
 $("#compare-load").click(function(e) {
-	_docuSkyObj.getQueryResultDocuments({}, e, loadDataFromDocusky);
+	_docuSkyObj.getDbCorpusDocuments('', '', '', e, getEntireDbCorpusText);
 });
 
 

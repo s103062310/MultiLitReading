@@ -4,6 +4,7 @@ This file defined all used data structures and global variables.
 
 
 var _docuSkyObj = null;			// global variable for accessing widget
+var _allDocList = [];			// all doc list in database
 var _inSystem = [];				// record the status of what data are in system
 
 var _color = new Color();

@@ -13,7 +13,7 @@ function setDocuSkyObj() {
 		alert("widget not ready, please wait for a while");
 	} else if (_docuSkyObj === null) {
 		_docuSkyObj = docuskyGetDbCorpusDocumentsSimpleUI;
-		// console.log(_docuSkyObj);
+		//console.log(_docuSkyObj);
 	}
 
 	clearInterval(setDocuSkyObj);
@@ -33,18 +33,47 @@ $(document).ready(function() {
 
 /* ---
 callback function, called when click load button
+get all documents in database
 --- */
-function loadDataFromDocusky() {
+function getEntireDbCorpusText() {
+	_allDocList = _docuSkyObj.docList;
+	let param = {target: _docuSkyObj.target, db: _docuSkyObj.db, corpus: _docuSkyObj.corpus};
+    getNextPage(param, processDataFromDocusky);
+}
+
+
+/* ---
+if not all documents are loaded, continue to load data
+--- */
+function  getNextPage(param, callback){
+	let totalPages = Math.ceil(_docuSkyObj.totalFound / _docuSkyObj.pageSize);
+	if (_docuSkyObj.page < totalPages) {
+		param.page = _docuSkyObj.page + 1;
+	  	_docuSkyObj.getQueryResultDocuments(param, null, function() {
+	    	_allDocList = _allDocList.concat(_docuSkyObj.docList);
+	     	getNextPage(param, callback);
+	  	});
+	} else {
+	  if (typeof callback === "function") callback();
+	}
+
+ }
+
+
+/* ---
+process document list from Docusky
+--- */
+function processDataFromDocusky() {
 
 	// access loading information
-	console.log(_docuSkyObj.docList);
-	dbName = getDBsrcFilename(_docuSkyObj.docList);
-	corpusNames = getCorpusNames(_docuSkyObj.docList);
+	console.log(_allDocList);
+	dbName = getDBsrcFilename(_allDocList);
+	corpusNames = getCorpusNames(_allDocList);
 
 	// database hasn't loaded before - load all data in database
 	if (!DBinSystem(dbName)) {
 		_inSystem[dbName] = corpusNames;
-		for (let i in corpusNames) buildCorpus(_docuSkyObj.docList, corpusNames[i]);
+		for (let i in corpusNames) buildCorpus(_allDocList, corpusNames[i]);
 
 	// database has loaded before - only load data not exist in system
 	} else {
@@ -53,7 +82,7 @@ function loadDataFromDocusky() {
 			// corpus not in system - load one corpus
 			if (!corpusInSystem(dbName, corpusNames[i])) {
 				_inSystem[dbName].push(corpusNames[i]);
-				buildCorpus(_docuSkyObj.docList, corpusNames[i]);
+				buildCorpus(_allDocList, corpusNames[i]);
 
 			// corpus in system - alert
 			} else {
