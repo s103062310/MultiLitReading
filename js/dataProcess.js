@@ -149,7 +149,7 @@ function parseDocuContent($docuContent) {
 		temp[anchorNames[j]] = '';
 	}
 
-	//console.log($docuContent);
+	// console.log($docuContent);
 
 	// parse
 	while (i < $docuContent.length) {
@@ -219,8 +219,8 @@ function parseDocuContent($docuContent) {
 		// normal charactor
 		} else {
 
-			// fliter strange charactor (seems like new line)
-			if ($docuContent[i].charCodeAt() !== 10 && $docuContent[i].charCodeAt() !== 13) {
+			// fliter strange charactor (seems like new line, tab)
+			if ($docuContent[i].charCodeAt() !== 9 && $docuContent[i].charCodeAt() !== 10 && $docuContent[i].charCodeAt() !== 13) {
 				
 				// push new charactor for each writable tag block
 				let alignDetector = [];
@@ -259,25 +259,29 @@ INPUT: string, XML tag string (<....>)
 OUTPUT: Tag, array of tag name and all attribute
 --- */
 function analyzeTag($tagStr) {
-	
-	// parse string
+
+	// console.log($tagStr);
+
 	var tagInfo = [];
-	var parsed = $tagStr.split(' ');
 
-	// analyze for each attribute
-	for (let attr in parsed) {
+	// extract tagName
+	var pos = $tagStr.indexOf(' ');
+	if (pos == -1) tagInfo['tagName'] = $tagStr.substring(0, $tagStr.length-1); 
+	else {
+		tagInfo['tagName'] = $tagStr.substring(0, pos);
 
-		// tag name
-		if (attr == 0) tagInfo['tagName'] = parsed[attr];
-
-		// other attribute
-		else {
-			let attrNamePosEnd = parsed[attr].indexOf('=');
-			let attrName = parsed[attr].substring(0, attrNamePosEnd);
-			let attrValuePosStart = parsed[attr].indexOf('"');
-			let attrValuePosEnd = parsed[attr].indexOf('"', attrValuePosStart+1);
-			let attrValue = parsed[attr].substring(attrValuePosStart+1, attrValuePosEnd);
-			tagInfo[attrName] = attrValue;
+		// parse tag
+		while(pos < $tagStr.length) {
+			if ($tagStr[pos]==' ') pos++;
+			else {
+				let attrNamePosEnd = $tagStr.indexOf('=', pos);
+				let attrName = $tagStr.substring(pos, attrNamePosEnd);
+				let attrValuePosStart = $tagStr.indexOf('"', attrNamePosEnd);
+				let attrValuePosEnd = $tagStr.indexOf('"', attrValuePosStart+1);
+				let attrValue = $tagStr.substring(attrValuePosStart+1, attrValuePosEnd);
+				tagInfo[attrName] = attrValue;
+				pos = attrValuePosEnd + 1;
+			}
 		}
 	}
 
