@@ -81,7 +81,7 @@ span ~ div:first-of-type,
 }
 
 .tagged:hover {
-	color: #505C67;
+	color: #51595F;
 }
 
 /* ----- COMPARE INTERFACE ----- */
@@ -102,6 +102,8 @@ span ~ div:first-of-type,
 	display: grid;
 	align-items: center;
 	text-align: center;
+	word-break: break-all;  /* English */
+	white-space: pre-wrap;  /* Chinese */
 }
 
 .compareContentBlock {
@@ -226,6 +228,7 @@ span ~ div:first-of-type,
 	grid-template-columns: 9fr 1fr;
 	border-bottom: 1px dashed #628475;
 	cursor: pointer;
+	padding: 3px;
 }
 
 .searchAnalysis .textBlock div:hover {
@@ -304,5 +307,8 @@ span ~ div:first-of-type,
 	grid-template-columns: 4fr 6fr;
 }
 
+.textandimage > div {
+	padding: 3%;
+}
 
 

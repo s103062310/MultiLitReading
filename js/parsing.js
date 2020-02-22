@@ -1,24 +1,26 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-This file defined the functions that used to process the raw
-data from DocuSky (parsing) and data in system.
+This file defined the functions that used to parse the data of 
+document information.
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 /* ---
 parse document information object from docusky into Document data structure
-INPUT: Object, document information from DocuSky
+INPUT: 1) Object, document information from DocuSky
+       2) string, source of data, 'sky' = from DocuSky, 'local' = from Computer
 OUTPUT: Document
 --- */
-function parseDocument($docuInfo) {
+function parseDocument($docuInfo, $source) {
 
 	// parse all content
-	var contentList = [];
+	var contentList = {};
+	var contentStr = ($source === 'sky') ?'docContentXml' :'doc_content';
 	var docId = $docuInfo.docId;
-	var metadataList = parseDocuMetadata($docuInfo);
-	var parsedContent = parseDocuContent($docuInfo.docContentXml)
+	var metadataList = parseDocuMetadata($docuInfo, $source);
+	var parsedContent = parseDocuContent($docuInfo[contentStr])
 
-	// initial
-	var anchorNames = getAnchorNames($docuInfo.docContentXml);
+	// initialize
+	var anchorNames = getAnchorNames($docuInfo[contentStr])
 	for (let alignType in anchorNames) contentList[anchorNames[alignType]] = [];
 	contentList['FullText'] = [];
 
@@ -40,33 +42,34 @@ function parseDocument($docuInfo) {
 
 /* ---
 extract metadata from document information to a list
-INPUT: Object, document information from DocuSky
+INPUT: 1) Object, document information from DocuSky
+       2) string, source of data, 'sky' = from DocuSky, 'local' = from Computer
 OUTPUT: array, all metadata, [for align, for system]
 --- */
-function parseDocuMetadata($docuInfo) {
+function parseDocuMetadata($docuInfo, $source) {
+	var parsed_meta = {}, parsed_system = {};
+	var skipData = ['docId', 'docTimeCreated', 'docXmlFormatSubname', 'xmlFormatName', 'srcFilename', 'docContentXml', 'docAttachmentType', 'doc_content'];
 
-	var parsed_meta = [];
-	var parsed_system = [];
-	var skipData = ['docId', 'docTimeCreated', 'docXmlFormatSubname', 'xmlFormatName', 'srcFilename', 'docContentXml'];
-	var space = new RegExp(' ', 'g');
-
+	// for each data
 	for (let item in $docuInfo) {
 
-		// skip data
+		// system data
 		if (itemInList(item, skipData) || itemInList('Order', item)) {
-			parsed_system[item] = $docuInfo[item].replace(space, '-');
+			parsed_system[item] = $docuInfo[item];
 			continue;
 		}
 
-		// convert xml and object data
-		if (item === 'docTitleXml') parsed_meta[item] = $docuInfo[item].substring(10, $docuInfo[item].length - 11).replace(space, '-');
-		else if (item === 'docMetadataXml') parsed_meta = concate(parsed_meta, parseUdefMetadata($docuInfo[item]));
-		else if (item === 'docAttachmentList') parsed_meta[item] = "<a href=\"" + $docuInfo[item] + "\" target=\"_blank\">點我看圖片</a>";
-		else if (typeof $docuInfo[item] === 'object') parsed_meta = concate(parsed_meta, parseObjMetadata($docuInfo[item]));
-		else parsed_meta[item] = $docuInfo[item].replace(space, '-');
+		// metadata
+		let meta = ($source == 'sky') ?((item in _metaSky2Spec) ?_metaSky2Spec[item] :item) :((item in _metaLocal2Spec) ?_metaLocal2Spec[item] :item);
+		if (item === 'docTitleXml') parsed_meta[meta] = $docuInfo[item].substring(10, $docuInfo[item].length - 11);
+		else if (item === 'docMetadataXml' || item === 'xml_metadata') Object.assign(parsed_meta, parseUdefMetadata($docuInfo[item]));
+		else if (item === 'docAttachmentList' || item === 'doc_attachment') parsed_meta[meta] = "<a href=\"" + $docuInfo[item] + "\" target=\"_blank\">點我看圖片</a>";
+		else if (typeof $docuInfo[item] === 'object') Object.assign(parsed_meta, parseObjMetadata($docuInfo[item]));
+		else parsed_meta[meta] = $docuInfo[item];
 	}
 
-	// console.log(parsed);
+	//console.log(parsed_meta);
+	//console.log(parsed_system);
 
 	return [parsed_meta, parsed_system];
 }
@@ -79,13 +82,12 @@ OUTPUT: array, all user defined metadata
 --- */
 function parseUdefMetadata($content) {
 
+	// filter xml text
 	var i = 0;
-	var metadataList = [];
-	var space = new RegExp(' ', 'g');
+	var metadataList = {};
 	var content = $content.substring(13, $content.length - 14);
-	// console.log(content);
 
-	while (i < content.length) {
+	while (1) {
 		let tagStartPos = content.indexOf('<', i);
 
 		// no more metadata
@@ -95,10 +97,10 @@ function parseUdefMetadata($content) {
 		// extract metadata
 		} else {
 			let tagEndPos = content.indexOf('>', tagStartPos);
-			let tagName = content.substring(tagStartPos + 1, tagEndPos);
+			let tagName = content.substring(tagStartPos + 1, tagEndPos).trim();
 			let valueEndPos = content.indexOf('/' + tagName, tagEndPos);
-			let value = content.substring(tagEndPos + 1, valueEndPos - 1);
-			metadataList[tagName] = value.replace(space, '-');
+			let value = content.substring(tagEndPos + 1, valueEndPos - 1).trim();
+			metadataList['自訂-' + tagName] = value;
 			i = valueEndPos;
 			// console.log(tagName, value, i);
 		}
@@ -116,14 +118,12 @@ INPUT: object, small part of metadata list
 OUTPUT: array, all metadata in object
 --- */
 function parseObjMetadata($content) {
-
-	var metadataList = [];
-	var space = new RegExp(' ', 'g');
+	var metadataList = {};
 	var skipData = ['timeseqNumber', 'timeseqType'];
 
 	for (let item in $content) {
 		if (itemInList(item, skipData)) continue;
-		metadataList[item] = $content[item].replace(space, '-');
+		metadataList[_metaSky2Spec[item]] = $content[item];
 	}
 
 	return metadataList;
@@ -144,12 +144,8 @@ function parseDocuContent($docuContent) {
 	var anchorNames = getAnchorNames($docuContent);
 	
 	// store for text that don't have align tag
-	var temp = [];
-	for (let j in anchorNames) {
-		temp[anchorNames[j]] = '';
-	}
-
-	// console.log($docuContent);
+	var temp = {};
+	for (let j in anchorNames) temp[anchorNames[j]] = '';
 
 	// parse
 	while (i < $docuContent.length) {
@@ -159,9 +155,8 @@ function parseDocuContent($docuContent) {
 
 			// get whole tag information
 			let tagPosEnd = $docuContent.indexOf('>', i);
-			let tagStr = $docuContent.substring(i + 1, tagPosEnd);
+			let tagStr = $docuContent.substring(i + 1, tagPosEnd).trim();
 			let tagInfo = analyzeTag(tagStr);
-			// console.log(tagInfo);
 
 			// end tag
 			if (tagInfo.tagName[0] === '/') {
@@ -171,7 +166,7 @@ function parseDocuContent($docuContent) {
 
 					// close the latest writing flag of tag, except Align tag
 					for (let j=parsed.length-1; j>=0; j--) {
-						if(parsed[j].tagInfo.tagName !== 'AlignBegin' && parsed[j].isWrite === true) {
+						if(parsed[j].tagInfo.tagName !== 'AlignBegin' && parsed[j].isWrite) {
 							parsed[j].isWrite = false;
 							break;
 						}
@@ -225,7 +220,7 @@ function parseDocuContent($docuContent) {
 				// push new charactor for each writable tag block
 				let alignDetector = [];
 				for (let tag in parsed) {
-					if (parsed[tag].isWrite === true) {
+					if (parsed[tag].isWrite) {
 						parsed[tag].content += $docuContent[i];
 						if (parsed[tag].tagInfo.tagName === 'AlignBegin') alignDetector.push(parsed[tag].tagInfo.Type);
 					}
@@ -260,25 +255,26 @@ OUTPUT: Tag, array of tag name and all attribute
 --- */
 function analyzeTag($tagStr) {
 
-	// console.log($tagStr);
-
-	var tagInfo = [];
-
 	// extract tagName
+	var tagInfo = {};
 	var pos = $tagStr.indexOf(' ');
-	if (pos == -1) tagInfo['tagName'] = $tagStr.substring(0, $tagStr.length-1); 
+
+	// no attribute
+	if (pos == -1) tagInfo['tagName'] = $tagStr.substring(0, $tagStr.length); 
+
+	// has attribute
 	else {
 		tagInfo['tagName'] = $tagStr.substring(0, pos);
 
-		// parse tag
+		// parse attribute
 		while(pos < $tagStr.length) {
-			if ($tagStr[pos]==' ') pos++;
+			if ($tagStr[pos]==' ' || $tagStr[pos]=='/') pos++;
 			else {
 				let attrNamePosEnd = $tagStr.indexOf('=', pos);
-				let attrName = $tagStr.substring(pos, attrNamePosEnd);
+				let attrName = $tagStr.substring(pos, attrNamePosEnd).trim();
 				let attrValuePosStart = $tagStr.indexOf('"', attrNamePosEnd);
 				let attrValuePosEnd = $tagStr.indexOf('"', attrValuePosStart+1);
-				let attrValue = $tagStr.substring(attrValuePosStart+1, attrValuePosEnd);
+				let attrValue = $tagStr.substring(attrValuePosStart+1, attrValuePosEnd).trim();
 				tagInfo[attrName] = attrValue;
 				pos = attrValuePosEnd + 1;
 			}
@@ -287,55 +283,4 @@ function analyzeTag($tagStr) {
 
 	return new Tag(tagInfo);
 }
-
-
-/* ---
-concate two list
-INPUT: two list to be concated
-OUTPUT: list, list1 + list2
---- */
-function concate(list1, list2) {
-	for (let item in list2) list1[item] = list2[item];
-	return list1;
-}
-
-
-/* ---
-pick the block that contain keyword
-INPUT: 1) string, target corpus name
-       2) string, target anchor type name
-       3) string, analysis mode
-       4) string, keyword
-OUTPUT: object, search results
---- */
-function searchInCorpus($corpusName, $anchorName, $mode, $query) {
-
-	var results = [];
-
-	for (let doc in _dataset[$corpusName]) {
-		if (doc == 'isShow') continue;
-
-		// document content
-		let title = _dataset[$corpusName][doc].metadata.docTitleXml;
-		let anchors = _dataset[$corpusName][doc][$anchorName];
-		let blocks = (anchors !== undefined) ?anchors :_dataset[$corpusName][doc]['FullText'];
-
-		// search in block
-		for (let i in blocks) {
-			if (itemInList($query, blocks[i].blockContent)) {
-				if ($mode === '文件順序') {
-					if (results[title] === undefined) results[title] = [];
-					results[title].push(blocks[i]);
-				} else if ($mode === '錨點類別') {
-					let id = blocks[i].tagInfo.Term;
-					if (results[id] === undefined) results[id] = [];
-					results[id].push(blocks[i]);
-				}
-			}
-		}
-	}
-
-	return results;
-}
-
 

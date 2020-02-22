@@ -5,7 +5,55 @@ modify html dynamicly.
 
 
 /* ---
-control board - compare - document management block
+highlight the hit block
+INPUT: 1) string, selector keyword
+       2) string, HEX of color that be changed
+--- */
+function changeContentBlockColor($selector, $color) {
+	$($selector).css('background-color', $color);
+	$($selector).attr('class', $($selector).attr("class") + " tagged");
+}
+
+
+/* ---
+clean all highlight color in blocks
+INPUT: html range that need to clean color
+--- */
+function cleanContentBlockColor($range) {
+	let taggedArray = $($range + " .tagged");
+	for(let i=0; i<taggedArray.length; i++) {
+		$(taggedArray[i]).removeClass('tagged');
+		$(taggedArray[i]).removeAttr('style');
+	}
+}
+
+
+/* ---
+update the whole page
+--- */
+function displayAll() {
+
+	// get information
+	var firstCorpus = getFirstCorpus();
+	var firstAlignType = getFirstAlignType();
+	if (firstCorpus === 'error') alert("[Error] 存取文獻集名稱錯誤，請洽工程師。");
+	if (firstAlignType === 'error') alert("[Error] 存取段落對讀設定錯誤，請洽工程師。");
+
+	// display
+	displayDocuManager();
+	displayMetadataList('filename');
+	displayAlignTypeList(firstAlignType);
+	displaySearchCorpus(firstCorpus);
+	displaySearchMode('DocOrder');
+	displayCompareContent('filename', firstAlignType);
+}
+
+
+// * * * * * * * * * * * * * * * * control board * * * * * * * * * * * * * * * * *
+
+
+/* ---
+compare - document management block
 --- */
 function displayDocuManager() {
 
@@ -14,18 +62,18 @@ function displayDocuManager() {
 
 	// show each corpus
 	for (let corpusName in _dataset) {
-		if (typeof _dataset[corpusName] === 'function') continue;
-		let manageItem = "<li>" + corpusName + "</li>";
-		let hideBtn = "<span class=\"glyphicon glyphicon-eye-close\" value=\"" + corpusName + "\" onclick=\"hideOrShowCorpus(this, '"+corpusName+"')\"></span>";
-		let deleteBtn = "<span class=\"glyphicon glyphicon-trash\" onclick=\"deleteCorpus('" + corpusName + "')\"></span>";
+		if (typeof _dataset[corpusName] !== 'object') continue;
+		let manageItem = "<li name=\"" + corpusName + "\">" + corpusName + "</li>";
+		let className = (_dataset[corpusName].isShow) ?"glyphicon-eye-open" :"glyphicon-eye-close";
+		let hideBtn = "<span class=\"glyphicon " + className + "\" name=\"" + corpusName + "\" onclick=\"hideOrShowCorpus(this, '"+corpusName+"')\"></span>";
+		let deleteBtn = "<span class=\"glyphicon glyphicon-trash\" name=\"" + corpusName + "\" onclick=\"deleteCorpus('" + corpusName + "')\"></span>";
 		$(".controlContentBlock[id=compare-manage] > ol").append(manageItem + hideBtn + deleteBtn);
 	}
-
 }
 
 
 /* ---
-control board - compare - metadata setting block
+compare - metadata setting block
 INPUT: string, active metadata
 --- */
 function displayMetadataList($activeMetadata) {
@@ -37,18 +85,18 @@ function displayMetadataList($activeMetadata) {
 	// show each metadata
 	for (let item in metadataList) {
 		let metadata = metadataList[item];
-		let metaSetting = "<li>" + metadata + "</li>";
+		let metaName = (metadata in _metadata) ?_metadata[metadata] :metadata;
+		let metaSetting = "<li>" + metaName + "</li>";
 		if ($activeMetadata === metadata) {
 			metaSetting += "<span class=\"glyphicon glyphicon-pushpin notHover\"></span>";
 		} else metaSetting += "<span class=\"glyphicon glyphicon-retweet\" onclick=\"changeMetadata('" + metadata + "')\"></span>";
 		$(".controlContentBlock[id=compare-metadataSetting] > ol").append(metaSetting);
 	}
-
 }
 
 
 /* ---
-control board - compare - align setting block
+compare - align setting block
 INPUT: string, active align type
 --- */
 function displayAlignTypeList($activeAlignType) {
@@ -66,32 +114,34 @@ function displayAlignTypeList($activeAlignType) {
 		} else alignSetting += "<span class=\"glyphicon glyphicon-retweet\" onclick=\"changeAlignType('" + alignType + "')\"></span>";
 		$(".controlContentBlock[id=compare-alignSetting] > ol").append(alignSetting);
 	}
-
 }
 
 
 /* ---
-control board - search - display block
+search - target corpus of search
 INPUT: string, active corpus
 --- */
 function displaySearchCorpus($activeCorpusName) {
 
 	// clear
-	$(".controlContentBlock[id=search-display] > ol").empty();
+	$(".controlContentBlock[id=search-corpus] > ol").empty();
 
 	// show each corpus
 	for (let corpusName in _dataset) {
-		if (typeof _dataset[corpusName] === 'function') continue;
+		if (typeof _dataset[corpusName] !== 'object') continue;
 
 		let displayItem = "<li>" + corpusName + "</li>";
 		if ($activeCorpusName === corpusName) displayItem += "<span class=\"glyphicon glyphicon-pushpin notHover\"></span>";
 		else displayItem += "<span class=\"glyphicon glyphicon-retweet\" onclick=\"changeSearchCorpus('" + corpusName + "')\"></span>";
-		$(".controlContentBlock[id=search-display] > ol").append(displayItem);
+		$(".controlContentBlock[id=search-corpus] > ol").append(displayItem);
 	}
-
 }
 
 
+/* ---
+search - search mode setting
+INPUT: string, active corpus
+--- */
 function displaySearchMode($activeMode) {
 
 	// clear
@@ -104,18 +154,17 @@ function displaySearchMode($activeMode) {
 		else displayItem += "<span class=\"glyphicon glyphicon-retweet\" onclick=\"changeSearchMode('" + mode + "')\"></span>";
 		$(".controlContentBlock[id=search-mode] > ol").append(displayItem);
 	}
-
 }
 
 
+// * * * * * * * * * * * * * * * * compare interface * * * * * * * * * * * * * * * * *
+
+
 /* ---
-main - compare interface
 INPUT: 1) string, active metadata
 	   2) string, active align type
 --- */
 function displayCompareContent($activeMetadata, $activeAlignType) {
-
-	var corpusNum = 0;
 
 	// clear
 	$(".compareContentBlock").empty();
@@ -123,13 +172,9 @@ function displayCompareContent($activeMetadata, $activeAlignType) {
 
 	// show all data
 	for (let corpusName in _dataset) {
-		if (typeof _dataset[corpusName] === 'function') continue;
-
-		// skip hided corpus
-		if (!_dataset[corpusName].isShow) continue;
+		if (typeof _dataset[corpusName] !== 'object') continue;
 
 		// create corpus column
-		corpusNum++;
 		let corpusBlock = "<div class=\"corpusBlock\" name=\"" + corpusName + "\">";
 		for (let doc in _dataset[corpusName]) {
 			if (typeof _dataset[corpusName][doc] !== 'object') continue;
@@ -138,15 +183,16 @@ function displayCompareContent($activeMetadata, $activeAlignType) {
 			let singleDocument = _dataset[corpusName][doc];
 			let docId = singleDocument.systemdata.docId;
 			let docMeta = singleDocument.metadata[$activeMetadata];
-			let docTitle = singleDocument.metadata.docTitleXml;
+			let docTitle = singleDocument.metadata.title;
 			let titleBlock = "<div><div class=\"titleBlock\" metaForAlign=\"" + docMeta + "\" key=\"" + docId + "\"><span onclick=\"moveDocument('" + docId + "', '" + corpusName + "')\">" + docTitle + "</span><span class=\"glyphicon glyphicon-chevron-down\" onclick=\"collapseMetadata('" + docId + "', this)\"></span></div>";
 			corpusBlock += titleBlock;
 
 			// metadata of single document
 			let metadataBlock = "<div class=\"metadataBlock\" key=\"" + docId + "\">";
 			for (item in singleDocument.metadata) {
-				if (item === $activeMetadata) metadataBlock += "<li class=\"" + item + " pinned\">" + item + ": " + singleDocument.metadata[item] + "</li>";
-				else metadataBlock += "<li class=\"" + item + "\">" + item + ": " + singleDocument.metadata[item] + "</li>";
+				let metaName = (item in _metadata) ?_metadata[item] :item;
+				if (item === $activeMetadata) metadataBlock += "<li class=\"" + item + " pinned\">" + metaName + ": " + singleDocument.metadata[item] + "</li>";
+				else metadataBlock += "<li name=\"" + item + "\">" + metaName + ": " + singleDocument.metadata[item] + "</li>";
 			}
 			metadataBlock += "</div>";
 			corpusBlock += metadataBlock;
@@ -169,7 +215,13 @@ function displayCompareContent($activeMetadata, $activeAlignType) {
 		// display
 		corpusBlock += "</div>";
 		$(".compareContentBlock").append(corpusBlock);
-		$(".compareTitleBlock").append("<h1>" + corpusName + "</h1>");
+		$(".compareTitleBlock").append("<h1 name=\"" + corpusName + "\">" + corpusName + "</h1>");
+
+		// close hide corpus
+		if (!_dataset[corpusName].isShow) {
+			$('.compareTitleBlock h1[name="' + corpusName + '"]').hide();
+			$('.corpusBlock[name="' + corpusName + '"]').hide();
+		}
 
 		// collapse metadatablock
 		for (let doc in _dataset[corpusName]) {
@@ -179,37 +231,50 @@ function displayCompareContent($activeMetadata, $activeAlignType) {
 	}
 
 	// default showup when no corpus is shown
-	if (corpusNum === 0) {
-		let corpusBlockBegin = "<div class=\"corpusBlock\"><div>";
-		let titleBlock = "<div class=\"titleBlock\"><span class=\"docuCompareBtn\">文件標題</span><span class=\"glyphicon glyphicon-chevron-up\" onclick=\"collapseMetadata('metadata', this)\"></span></div>";
-		let metaBlock = "<div class=\"metadataBlock\" key=\"metadata\"><li class=\"metadata1 pinned\">metadata1: 1</li><li class=\"metadata2\">metadata2: 2</li></div>";
-		let textBlock1 = "<div class=\"textBlock\">內文1</div>"
-		let textBlock2 = "<div class=\"textBlock\">內文2</div>"
-		let corpusBlockEnd = "</div></div>";
-		let corpusBlock = corpusBlockBegin + titleBlock + textBlock1 + textBlock2 + corpusBlockEnd;
-		$(".compareContentBlock").append(corpusBlock);
-		$(".compareTitleBlock").append("<h1>文本名稱</h1>");
-		corpusNum++;
-	}
+	var corpusNum = getShowedCorpusNum();
+	if (corpusNum === 0) displayDefaultCompare();
 
 	// modify css column
-	var compareContentBlock = document.getElementsByClassName("compareContentBlock");
-	var compareTitleBlock = document.getElementsByClassName("compareTitleBlock");
-	compareContentBlock[0].style.gridTemplateColumns = "repeat(" + corpusNum + ", 1fr)";
-	compareTitleBlock[0].style.gridTemplateColumns = "repeat(" + corpusNum + ", 1fr)";
-
+	else {
+		let cssStr = "repeat(" + corpusNum + ", 1fr)";
+		$('.compareContentBlock').css('grid-template-columns', cssStr);
+		$('.compareTitleBlock').css('grid-template-columns', cssStr);
+	}
 }
 
 
 /* ---
-main - search results
+default compare interface (when there is no corpus)
+--- */
+function displayDefaultCompare() {
+
+	// html
+	let corpusBlockBegin = "<div class=\"corpusBlock\" name=\"default\"><div>";
+	let titleBlock = "<div class=\"titleBlock\"><span class=\"docuCompareBtn\">文件標題</span><span class=\"glyphicon glyphicon-chevron-up\" onclick=\"collapseMetadata('metadata', this)\"></span></div>";
+	let metaBlock = "<div class=\"metadataBlock\" key=\"metadata\"><li class=\"metadata1 pinned\">metadata1: 1</li><li class=\"metadata2\">metadata2: 2</li></div>";
+	let textBlock1 = "<div class=\"textBlock\">內文1</div>"
+	let textBlock2 = "<div class=\"textBlock\">內文2</div>"
+	let corpusBlockEnd = "</div></div>";
+	let corpusBlock = corpusBlockBegin + titleBlock + textBlock1 + textBlock2 + corpusBlockEnd;
+	$(".compareContentBlock").append(corpusBlock);
+	$(".compareTitleBlock").append("<h1 name=\"default\">文本名稱</h1>");
+
+	// css
+	$('.compareContentBlock').css('grid-template-columns', 'repeat(1, 1fr)');
+	$('.compareTitleBlock').css('grid-template-columns', 'repeat(1, 1fr)');
+}
+
+
+// * * * * * * * * * * * * * * * * search interface * * * * * * * * * * * * * * * * *
+
+
+/* ---
+right - search results
 INPUT: 1) target corpus
 	   2) object, search results data structure
        3) string, keyword
 --- */
 function displaySearchResult($corpusName, $results, $query) {
-
-	// console.log($results);
 
 	// clear
 	$(".searchInterface > h1").empty();
@@ -241,27 +306,23 @@ function displaySearchResult($corpusName, $results, $query) {
 
 	// change title
 	$(".searchInterface > h1").append("檢索結果 ｜ " + $corpusName + " | " + keywordNum);
-
 }
 
 
 /* ---
-main - search analysis
+left - search analysis
 INPUT: 1) object, search results data structure
 	   2) string, analysis mode
        3) string, keyword
 --- */
 function displaySearchAnalysis($results, $mode, $query) {
 
-	// console.log($results);
-
 	// clear
 	$(".searchAnalysis").empty();
 
+	// show each document
 	var keyword = new RegExp($query, 'g');
 	var analysisBlock = "<h2>" + $mode + "</h2>";
-
-	// show each document
 	for (let doc in $results) {
 
 		// content
@@ -271,7 +332,7 @@ function displaySearchAnalysis($results, $mode, $query) {
 			let queryNum = $results[doc][i].blockContent.match(keyword).length;
 			let anchorType = $results[doc][i].tagInfo.Type;
 			let anchorKey = $results[doc][i].tagInfo.Key;
-			let anchorID = (!$results[doc][i].tagInfo.RefId) ?" " :$results[doc][i].tagInfo.RefId;
+			let anchorID = (!$results[doc][i].tagInfo.RefId) ?"no ID" :$results[doc][i].tagInfo.RefId;
 			let anchorBlock = "<div class=\"searchItem\" key=\"" + anchorKey + "\"><span onclick=\"jumpToBlock('" + anchorKey + "')\">" + anchorType + " 。 " + anchorID + " 。 " + anchorKey + "</span><span>" + queryNum + "</span></div>";
 			contentBlock += anchorBlock;
 			totalKeywordNum += queryNum;
@@ -288,33 +349,5 @@ function displaySearchAnalysis($results, $mode, $query) {
 
 	// collapse textblock
 	for (let doc in $results) collapse(".searchInterface div[name=" + doc + ']');
-
 }
-
-
-/* ---
-highlight the hit block
-INPUT: 1) string, selector keyword
-       2) string, HEX of color that be changed
---- */
-function changeContentBlockColor($selector, $color) {
-	$($selector).attr('style', "background-color: " + $color + ";");
-	$($selector).attr('class', $($selector).attr("class") + " tagged");
-}
-
-
-/* ---
-clean all highlight color in blocks
-INPUT: html range that need to clean color
---- */
-function cleanContentBlockColor($range) {
-	let taggedArray = $($range + " .tagged");
-	for(let i=0; i<taggedArray.length; i++) {
-		$(taggedArray[i]).removeClass('tagged');
-		$(taggedArray[i]).removeAttr('style');
-	}
-}
-
-
-
 

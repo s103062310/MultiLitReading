@@ -1,3 +1,6 @@
+
+/* ----- WEB SETTING ----- */
+
 body {
 	overflow: hidden;
 }
@@ -13,10 +16,12 @@ body > button {
 	z-index: 10;
 	background: rgba(0, 0, 0, 0);
 	border-color: rgba(0, 0, 0, 0);
-	color: #505C67;
+	color: #51595F;
 	font-size: 18px;
 	outline: none;
 }
+
+/* ----- NAVIGATION ----- */
 
 nav {
 	width: 30%;
@@ -24,7 +29,7 @@ nav {
 	position: absolute;
 	z-index: 5;
 	background-color: white;
-	border: solid 5px #505C67;
+	border: solid 5px #51595F;
 	display: grid;
 	grid-template-rows: 1fr 9fr;
 	grid-template-areas: "header"
@@ -37,11 +42,11 @@ nav h1 {
 	display: grid;
 	align-items: center;	/* vertical */
 	text-align: center;  	/* horizontal */
-	color: #505C67;
+	color: #51595F;
 }
 
 .tabBlock {
-	height: 100%;
+	height: 90%;
 	grid-area: tabBlock;
 	display: grid;
 	grid-template-rows: 1fr 14fr;
@@ -49,7 +54,7 @@ nav h1 {
 						 "tabContent";
 }
 
-/* ----- TAB SETTING ----- */
+/* ----- TAB BUTTON & PAGE SWITCHING ----- */
 
 .tabBtn {
 	grid-area: tabBtn;
@@ -58,8 +63,8 @@ nav h1 {
 }
 
 .tabBtn a {
-	background-color: #505C67;
-	border-top: solid 10px #505C67;
+	background-color: #51595F;
+	border-top: solid 10px #51595F;
 	padding: 2% 0;
 	text-decoration: none;
 	font-size: 20px;
@@ -71,7 +76,7 @@ nav h1 {
 
 /* first render to basic background color */
 span:target ~ nav .tabBlock .tabBtn a:first-of-type {
-	background-color: #505C67;
+	background-color: #51595F;
 	font-weight: normal;
 	color: white;
 }
@@ -83,7 +88,7 @@ span ~ nav .tabBlock .tabBtn a:first-of-type,
 #explainTab:target ~ nav .tabBlock .tabBtn a[href="#explainTab"] {
 	background-color: white;
 	font-weight: bold;
-	color: #505C67;
+	color: #51595F;
 }
 
 /* highlight when hover */
@@ -96,7 +101,7 @@ span ~ nav .tabBlock .tabBtn a:hover,
 	color: white;
 }
 
-/* ----- CONTENT SETTING ----- */
+/* ----- TAB CONTENT & SWITCHING ----- */
 
 .tabContent {
 	grid-area: tabContent; 
@@ -127,7 +132,7 @@ span ~ nav .tabBlock .tabContent > div:first-of-type,
 /* ----- CONTROLLER SETTING ----- */
 
 .controlTitleBlock {
-	background-color: #505C67;
+	background-color: #51595F;
 	margin: 5% 2% 0 2%;
 	padding: 2%;
 	border-radius: 10px;
@@ -148,10 +153,24 @@ span ~ nav .tabBlock .tabContent > div:first-of-type,
 	border-radius: 10px;
 }
 
+.controlContentBlock label {
+	border-bottom: 1px dashed #51595F;
+	padding: 3px;
+	margin: 0;
+	align-items: center;
+	text-align: center;
+	font-weight: normal;
+}
+
+.controlContentBlock label:hover {
+	background-color: #CED1D2;
+	cursor: pointer;
+}
+
 /* icon button */
 .controlContentBlock span {
 	border: 0;
-	color: #505C67;
+	color: #51595F;
 	background-color: rgba(0, 0, 0, 0);
 	display: grid;
 	align-items: center;
@@ -164,7 +183,7 @@ span ~ nav .tabBlock .tabContent > div:first-of-type,
 }
 
 .controlContentBlock .notHover:hover {
-	color: #505C67;
+	color: #51595F;
 	cursor: default;
 }
 

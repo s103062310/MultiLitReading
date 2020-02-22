@@ -25,7 +25,7 @@ INPUT: 1) string, target database source filename
 OUTPUT: boolean, in system = true, not in system = false
 --- */
 function corpusInSystem($dbName, $corpusName) {
-	if (_inSystem[$dbName].indexOf($corpusName) === -1) return false;
+	if (_inSystem[$dbName][$corpusName] === undefined) return false;
 	else return true;
 }
 
@@ -61,9 +61,9 @@ INPUT: array, documents object
 OUTPUT: array, corpus names
 --- */
 function getCorpusNames($docList) {
-
 	var corpusNames = [];
 
+	// scan all document
 	for (let i in $docList) {
 		let corpusName = $docList[i].docInfo.corpus;
 		if (!itemInList(corpusName, corpusNames)) corpusNames.push(corpusName);
@@ -79,7 +79,6 @@ INPUT: string, document xml content
 OUTPUT: array, anchor names / align types
 --- */
 function getAnchorNames($docuContent) {
-
 	var i = 0;
 	var anchorNames = [];
 
@@ -94,7 +93,7 @@ function getAnchorNames($docuContent) {
 		let tagString = $docuContent.substring(tagStartPos + 1, tagEndPos);
 		let attrStartPos = tagString.indexOf('Type');
 		if (attrStartPos === -1) {
-			alert("Format Error: Not find Type attribute in Align Tag.");
+			alert("[Error] XML 格式錯誤，AlignBegin tag 中未發現 Type 屬性。");
 			i = tagEndPos + 1;
 			continue;
 		}
@@ -119,7 +118,7 @@ OUTPUT: string, corpus name
 --- */
 function getFirstCorpus() {
 	for (let corpusName in _dataset) {
-		if (typeof _dataset[corpusName] === 'function') continue;
+		if (typeof _dataset[corpusName] !== 'object') continue;
 		return corpusName;
 	}
 	return 'error';
@@ -149,20 +148,18 @@ INPUT: none, access through global variable
 OUTPUT: array, all align type
 --- */
 function getAlignTypeList() {
-
 	var alignTypeList = [];
 
 	for (let corpusName in _dataset) {
-		if (typeof _dataset[corpusName] === 'function') continue;
+		if (typeof _dataset[corpusName] !== 'object') continue;
 
 		let documents = _dataset[corpusName];
 		for (let i in documents) {
+			if (typeof documents[i] !== 'object') continue;
 
 			for (let element in documents[i]) {
 				if (element === 'metadata' || element === 'systemdata') continue;
-				if (!itemInList(element, alignTypeList)) {
-					alignTypeList.push(element);
-				}
+				if (!itemInList(element, alignTypeList)) alignTypeList.push(element);
 			}
 		}
 	}
@@ -177,20 +174,17 @@ INPUT: none, access through global variable
 OUTPUT: array, all metadata
 --- */
 function getMetadataList() {
-
 	var metadataList = [];
 
 	for (let corpusName in _dataset) {
-		if (typeof _dataset[corpusName] === 'function') continue;
+		if (typeof _dataset[corpusName] !== 'object') continue;
 
 		let documents = _dataset[corpusName];
 		for (let i in documents) {
 
 			let list = documents[i].metadata;
 			for (let item in list) {
-				if (!itemInList(item, metadataList)) {
-					metadataList.push(item);
-				}
+				if (!itemInList(item, metadataList)) metadataList.push(item);
 			}
 		}
 	}
@@ -205,16 +199,12 @@ INPUT: list in html
 OUTPUT: string, html text of active item
 --- */
 function getActiveItemInList($span) {
-
-	// console.log($span[0].children[0].children);
-
 	var list = $span[0].children[0].children;
 	for (let i=0; i<list.length; i++) {
 		if (list[i].className === 'glyphicon glyphicon-pushpin notHover') {
 			return list[i-1].innerText;
 		}
 	}
-
 	return 'error';
 }
 
@@ -227,10 +217,10 @@ OUTPUT: string, refid
 function getRefIdFromKey($key) {
 
 	// get target corpus
-	var corpusName = getActiveItemInList($('.controlContentBlock[id=search-display]'));
+	var corpusName = getActiveItemInList($('.controlContentBlock[id=search-corpus]'));
 	var anchorName = getActiveItemInList($('.controlContentBlock[id=compare-alignSetting]'));
 	if (corpusName === 'error' || anchorName === 'error') {
-		alert("Fail to access target corpus " + corpusName + " or anchor type " + anchorName + '.');
+		alert("[Error] 讀取對讀設定錯誤。");
 		return;
 	}
 
@@ -238,7 +228,6 @@ function getRefIdFromKey($key) {
 	for (let doc in _dataset[corpusName]) {
 		let anchors = _dataset[corpusName][doc][anchorName];
 		let blocks = (anchors !== undefined) ?anchors :_dataset[corpusName][doc]['FullText'];
-
 
 		for (let i in blocks) {
 			if (blocks[i].tagInfo.Key === $key) return blocks[i].tagInfo.RefId;
@@ -249,4 +238,18 @@ function getRefIdFromKey($key) {
 	return 'error';
 }
 
+
+/* ---
+get corpus No. of 'isShow = true'
+INPUT: none, access through global variable
+OUTPUT: int, corpus No. of 'isShow = true'
+--- */
+function getShowedCorpusNum() {
+	var num = 0;
+	for (corpusName in _dataset) {
+		if (typeof _dataset[corpusName] !== 'object') continue;
+		if (_dataset[corpusName].isShow) num++;
+	}
+	return num;
+}
 
