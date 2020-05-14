@@ -163,6 +163,14 @@ function setDocuSkyObj() {
 	} else if (_docuSkyObj === null) {
 		_docuSkyObj = docuskyGetDbCorpusDocumentsSimpleUI;
 		//console.log(_docuSkyObj);
+
+		// parse parameter
+		let url = new URL(window.location.href);
+		
+		// public database
+		if (url.searchParams.has('public')) {
+			_docuSkyObj.getDbCorpusDocuments('OPEN', url.searchParams.get('public'), '[ALL]', null, getEntireDbCorpusText);
+		}
 	}
 
 	clearInterval(setDocuSkyObj);

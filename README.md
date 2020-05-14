@@ -1,11 +1,12 @@
 # MultiLitReading
 [Develop Weekly Progress](https://hackmd.io/@6vl-R1QtRl-LuttqpoUdVA/HJdOAaLXN?type=view)
 
-> 2019.06.17 | v.1.0
-> 2019.07.03 | v.1.1, add: explain interface
-> 2019.07.06 | v.1.2, fix: load complete database data
-> 2019.10.31 | v.1.3, fix: filter tab charactor and fix term display error
-> 2020.02.22 | v.2.0
+> 2019.06.17 | v.1.0  
+> 2019.07.03 | v.1.1, add: explain interface  
+> 2019.07.06 | v.1.2, fix: load complete database data  
+> 2019.10.31 | v.1.3, fix: filter tab charactor and term display error  
+> 2020.02.22 | v.2.0  
+> 2020.05.14 | v.2.1, add: auto load database from url parameter
 
 ## Example Directory
 Some example XML files that can be applied on this tool. You can:

@@ -8,10 +8,18 @@ computer and DocuSky.
 
 
 /* ---
-callback function, called when click load button
+success callback function, called when click load button
 get all documents in database
 --- */
 function getEntireDbCorpusText() {
+
+	// fail to find database
+	if (_docuSkyObj.totalFound == 0) {
+		alert("在公開庫中找不到「" + _docuSkyObj.db + "」。");
+		return;
+	}
+
+	// get data
 	_allDocList = _docuSkyObj.docList;
 	let param = {target: _docuSkyObj.target, db: _docuSkyObj.db, corpus: _docuSkyObj.corpus};
 	getNextPage(param, processDataFromDocusky);
