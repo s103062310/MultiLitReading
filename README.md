@@ -6,7 +6,8 @@
 > 2019.07.06 | v.1.2, fix: load complete database data  
 > 2019.10.31 | v.1.3, fix: filter tab charactor and term display error  
 > 2020.02.22 | v.2.0  
-> 2020.05.14 | v.2.1, add: auto load database from url parameter
+> 2020.05.14 | v.2.1, add: auto load database from url parameter  
+> 2020.05.23 | v.2.2, mod: UI for project  
 
 ## Example Directory
 Some example XML files that can be applied on this tool. You can:
@@ -31,6 +32,9 @@ Utilize CSS to implement. Step of adding new interface described below:
 > 7. In .css, add ```#TabName:target ~ nav .tabBlock .tabBtn a:hover``` under ```/* highlight when hover */```
 > 8. In .css, add ```#TabName:target ~ nav .tabBlock .tabContent .TabController``` under ```/* display content or default content */```
 
+## HTML File
+* explanation of tool for different project
+
 ## JS File
 1. **globalVar.js** =>
     * defined all used data structures and global variables
@@ -42,10 +46,11 @@ computer and DocuSky
 document information
 4. **display.js** => is responsible for UI display, used javascript to 
 modify html dynamicly
-5. **checkergetter.js** => defined all checker (return a boolean value) and 
+5. **display_proj.js** => display.js for project
+6. **checkergetter.js** => defined all checker (return a boolean value) and 
 getter (get some information)
-6. **controlFunc.js** => defined the interaction function of control board
-7. **mainFunc.js** => defined the interaction function of main tool
+7. **controlFunc.js** => defined the interaction function of control board
+8. **mainFunc.js** => defined the interaction function of main tool
 
 ## CSS Files
 1. **main-style.css** => for main screen

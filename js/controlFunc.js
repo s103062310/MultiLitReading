@@ -7,17 +7,24 @@ This file defined the interaction function of control board.
 
 
 /* ---
-slide animation on control board
+close control board
 --- */
-function toggleControlBoard() {
+function toggleControlBoard($active) {
 
-	// change btn color
-	var btnColor = $('controlBtn').css('color');
-	if (btnColor == 'white') ('controlBtn').css('color', _color.controltitle);
-	else $('controlBtn').css('color', 'white');
+	// set active
+	$('nav').attr('class', $active);
 
-	// control board animation
-	collapse('nav');
+	// start animation
+	setTimeout(function() {
+		$('nav').addClass('animating');
+	}, 0);
+
+	// stop animation
+	setTimeout(function() {
+		if ($active == 'open') $('nav').addClass('showNav');
+		$('nav').removeClass($active);
+		$('nav').removeClass('animating');
+	}, 600);
 }
 
 

@@ -8,6 +8,8 @@ This file's functions:
 
 // * * * * * * * * * * * * * * * * variables * * * * * * * * * * * * * * * * *
 
+var _url;
+var _projPara = {};
 
 var _docuSkyObj = null;			// global variable for accessing widget
 var _allDocList = [];			// all doc list in database
@@ -150,6 +152,25 @@ trigger initialization until finishing initialization when file is ready
 --- */
 $(document).ready(function() {
 	setInterval(setDocuSkyObj, 1000);
+
+	// parse parameter
+	_url = new URL(window.location.href);
+
+	// load source
+	if (_url.searchParams.has('public')) {
+		if (_url.searchParams.get('public') == '春秋三傳') {
+			$('.explainInterface').load('html/exp_chunqiu.html');
+			_projPara['meta'] = 'title';
+			_projPara['align'] = 'Time';
+		}
+
+		$('html').append('<script src="js/display_proj.js"></script>');
+		displayDefault();
+
+	} else {
+		$('.explainInterface').load('html/exp_general.html');
+		$('html').append('<script src="js/display.js"></script>');
+	}
 });
 
 
@@ -163,13 +184,10 @@ function setDocuSkyObj() {
 	} else if (_docuSkyObj === null) {
 		_docuSkyObj = docuskyGetDbCorpusDocumentsSimpleUI;
 		//console.log(_docuSkyObj);
-
-		// parse parameter
-		let url = new URL(window.location.href);
 		
 		// public database
-		if (url.searchParams.has('public')) {
-			_docuSkyObj.getDbCorpusDocuments('OPEN', url.searchParams.get('public'), '[ALL]', null, getEntireDbCorpusText);
+		if (_url.searchParams.has('public')) {
+			_docuSkyObj.getDbCorpusDocuments('OPEN', _url.searchParams.get('public'), '[ALL]', null, getEntireDbCorpusText);
 		}
 	}
 

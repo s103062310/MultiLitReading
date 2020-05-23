@@ -9,40 +9,87 @@ body > span {
 	display: none;
 }
 
-body > button {
-	width: 5%;
-	height: 5%;
+#controlBtn {
+	width: 60px;
+	height: 60px;
 	position: fixed;
-	z-index: 10;
-	background: rgba(0, 0, 0, 0);
-	border-color: rgba(0, 0, 0, 0);
-	color: #51595F;
-	font-size: 18px;
-	outline: none;
+	z-index: 5;
+	color: white;
+	font-size: 26px;
+	display: grid;
+	align-items: center;
+	text-align: center;
+	cursor: pointer;
+}
+
+#controlBtn:hover {
+	color: #E2E5E7;
 }
 
 /* ----- NAVIGATION ----- */
 
-nav {
+#nav.showNav, #nav.open, #nav.close {
+	display: grid;
+	opacity: 1;
+}
+
+.animating {
+	transition: all .3s ease-in-out;
+}
+
+.close {
+	transform: translateX(0%);
+}
+.animating.close {
+	transform: translateX(-100%);
+}
+
+.open {
+	transform: translateX(-100%);
+}
+.animating.open {
+	transform: translateX(0%);
+}
+
+#nav {
 	width: 30%;
 	height: 100%;
 	position: absolute;
-	z-index: 5;
+	z-index: 10;
 	background-color: white;
 	border: solid 5px #51595F;
-	display: grid;
+	display: none;
+	grid-template-columns: 9fr 1fr;
 	grid-template-rows: 1fr 9fr;
-	grid-template-areas: "header"
-						 "tabBlock";
+	grid-template-areas: "header btn"
+						 "tabBlock tabBlock";
 }
 
-nav h1 {
+#navTitle {
 	grid-area: header;
 	font-size: 30px;
 	display: grid;
 	align-items: center;	/* vertical */
 	text-align: center;  	/* horizontal */
 	color: #51595F;
+	margin: 0;
+}
+
+#navBtn {
+	grid-area: btn;
+	width: 60px;
+	height: 60px;
+	color: #51595F;
+	font-size: 26px;
+	display: grid;
+	text-align: center;
+	align-self: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+#navBtn:hover {
+	color: #6F7982;
 }
 
 .tabBlock {
@@ -160,11 +207,11 @@ span ~ nav .tabBlock .tabContent > div:first-of-type,
 	align-items: center;
 	text-align: center;
 	font-weight: normal;
+	cursor: pointer;
 }
 
 .controlContentBlock label:hover {
 	background-color: #CED1D2;
-	cursor: pointer;
 }
 
 /* icon button */
@@ -175,11 +222,11 @@ span ~ nav .tabBlock .tabContent > div:first-of-type,
 	display: grid;
 	align-items: center;
 	text-align: center;
+	cursor: pointer;
 }
 
 .controlContentBlock span:hover {
 	color: #FCB0B3;
-	cursor: pointer;
 }
 
 .controlContentBlock .notHover:hover {

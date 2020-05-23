@@ -212,11 +212,11 @@ span ~ div:first-of-type,
 	background-color: #628475;
 	display: grid;
 	grid-template-columns: 9fr 1fr;
+	cursor: pointer;
 }
 
 .searchAnalysis .titleBlock:hover {
 	background-color: #7E9A8E;
-	cursor: pointer;
 }
 
 .searchAnalysis .textBlock {
@@ -273,11 +273,11 @@ span ~ div:first-of-type,
 
 .explainTable .titleBlock {
 	background-color: #756F63;
+	cursor: pointer;
 }
 
 .explainTable .titleBlock:hover {
 	background-color: #817C71;
-	cursor: pointer;
 }
 
 .explainTable .textBlock {
@@ -290,11 +290,11 @@ span ~ div:first-of-type,
 	margin: 0;
 	align-items: center;
 	text-align: center;
+	cursor: pointer;
 }
 
 .explainTable .textBlock h4:hover {
 	background-color: #BAB8B4;
-	cursor: pointer;
 }
 
 .explainContent > div {
