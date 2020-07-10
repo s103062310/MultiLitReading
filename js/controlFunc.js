@@ -152,6 +152,7 @@ INPUT: string, new target for metadata alignment
 function changeMetadata($metadata) {
 
 	// display
+	_para['metadata'] = $metadata;
 	displayMetadataList($metadata);
 
 	// clean highlight
@@ -175,8 +176,9 @@ align type setting - change align type for align
 INPUT: string, new target for type alignment
 --- */
 function changeAlignType($alignType) {
+	_para['aligntype'] = $alignType;
 	displayAlignTypeList($alignType);
-	displayCompareContent(getActiveItemInList($('.controlContentBlock[id$=compare-metadataSetting]')), $alignType);
+	displayCompareContent(_para['metadata'], $alignType);
 }
 
 
@@ -190,9 +192,9 @@ INPUT: string, keyword
 function search($query) {
 	
 	// get target corpus
-	var corpusName = getActiveItemInList($('.controlContentBlock[id=search-corpus]'));
-	var anchorName = getActiveItemInList($('.controlContentBlock[id=compare-alignSetting]'));
-	var mode = getActiveItemInList($('.controlContentBlock[id=search-mode]'));
+	var corpusName = _para['corpus'];
+	var anchorName = _para['aligntype'];
+	var mode = _para['mode'];
 	if (corpusName === 'error' || anchorName === 'error' || mode === 'error') {
 		alert("[Error] 讀取搜尋設定錯誤。");
 		return;
@@ -210,6 +212,7 @@ corpus - choose corpus that be searched
 INPUT: string, corpus name that want to show its results
 --- */
 function changeSearchCorpus($corpusName) {
+	_para['corpus'] = $corpusName;
 	displaySearchCorpus($corpusName);
 	var query = $('input[name=searchQuery]')[0].value;
 	if (query.length > 0) search(query);
@@ -221,6 +224,7 @@ mode - choose mode that results be analyzed
 INPUT: string, mode of analysis method
 --- */
 function changeSearchMode($mode) {
+	_para['mode'] = $mode;
 	displaySearchMode($mode);
 	var query = $('input[name=searchQuery]')[0].value;
 	if (query.length > 0) search(query);
@@ -250,11 +254,11 @@ function searchInCorpus($corpusName, $anchorName, $mode, $query) {
 		for (let i in blocks) {
 			if (itemInList($query, blocks[i].blockContent)) {
 
-				if ($mode === '文件順序') {
+				if ($mode === 'DocOrder') {
 					if (results[title] === undefined) results[title] = [];
 					results[title].push(blocks[i]);
 
-				} else if ($mode === '錨點類別') {
+				} else if ($mode === 'Term') {
 					let id = (blocks[i].tagInfo.Term === undefined) ?'未分類' :blocks[i].tagInfo.Term;
 					if (results[id] === undefined) results[id] = [];
 					results[id].push(blocks[i]);

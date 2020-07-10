@@ -194,22 +194,6 @@ function getMetadataList() {
 
 
 /* ---
-see users' choice in given list (extract information from html setting)
-INPUT: list in html
-OUTPUT: string, html text of active item
---- */
-function getActiveItemInList($span) {
-	var list = $span[0].children[0].children;
-	for (let i=0; i<list.length; i++) {
-		if (list[i].className === 'glyphicon glyphicon-pushpin notHover') {
-			return list[i-1].innerText;
-		}
-	}
-	return 'error';
-}
-
-
-/* ---
 give unique key value and get correspond refid
 INPUT: string, key value
 OUTPUT: string, refid
@@ -217,12 +201,8 @@ OUTPUT: string, refid
 function getRefIdFromKey($key) {
 
 	// get target corpus
-	var corpusName = getActiveItemInList($('.controlContentBlock[id=search-corpus]'));
-	var anchorName = getActiveItemInList($('.controlContentBlock[id=compare-alignSetting]'));
-	if (corpusName === 'error' || anchorName === 'error') {
-		alert("[Error] 讀取對讀設定錯誤。");
-		return;
-	}
+	var corpusName = _para['corpus'];
+	var anchorName = _para['aligntype'];
 
 	// find target
 	for (let doc in _dataset[corpusName]) {

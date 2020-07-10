@@ -107,6 +107,7 @@ body > span {
 	grid-area: tabBtn;
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
+	font-size: 
 }
 
 .tabBtn a {
@@ -119,6 +120,7 @@ body > span {
 	display: grid;
 	align-items: center;
 	text-align: center;	
+	font-size: x-large;
 }
 
 /* first render to basic background color */
@@ -183,7 +185,7 @@ span ~ nav .tabBlock .tabContent > div:first-of-type,
 	margin: 5% 2% 0 2%;
 	padding: 2%;
 	border-radius: 10px;
-	font-size: 18px;
+	font-size: large;
 	color: white;
 	text-align: center;
 	cursor: pointer;
@@ -198,6 +200,7 @@ span ~ nav .tabBlock .tabContent > div:first-of-type,
 	margin: 1% 4%;
 	padding: 2%;
 	border-radius: 10px;
+	font-size: medium;
 }
 
 .controlContentBlock label {

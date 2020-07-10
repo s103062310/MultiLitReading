@@ -9,7 +9,7 @@ This file's functions:
 // * * * * * * * * * * * * * * * * variables * * * * * * * * * * * * * * * * *
 
 var _url;
-var _projPara = {};
+var _para = {};
 
 var _docuSkyObj = null;			// global variable for accessing widget
 var _allDocList = [];			// all doc list in database
@@ -22,11 +22,12 @@ var _dataset = new Dataset();	// data that user import from docusky
 								// corpuses >> documents >> anchors
 
 // convert metadata english name to chinese
-var _metadata = {filename: '檔名', corpus: '文獻集名稱', compilation_name: '文件出處', compilation_order: '文件出處的次序', compilation_vol: '文件出處的冊數', title: '文件標題', author: '文件作者', doc_topic_l1: '文件主題階層一', doc_topic_l2: '文件主題階層二', doc_topic_l3: '文件主題階層三', geo_level1: '文件地域階層一', geo_level2: '文件地域階層二', geo_level3: '文件地域階層三', geo_longitude: '文件所在經度', geo_latitude: '文件所在緯度', doc_category_l1: '文件分類階層一', doc_category_l2: '文件分類階層二', doc_category_l3: '文件分類階層三', docclass: '文件類別', docclass_aux: '文件子類別', doctype: '文件型態', doctype_aux: '文件子型態', book_code: '文件書碼', time_orig_str: '文件時間(字串)', time_varchar: '文件時間(西曆)', time_norm_year: '文件時間(中曆)', time_era: '文件時間(年號)', time_norm_kmark: '文件時間(帝號)', year_for_grouping: '文件時間(西元年)', time_dynasty: '文件時間(朝代)', doc_seq_number: '文件順序', timeseq_not_before: '文件起始時間', timeseq_not_after: '文件結束時間', doc_source: '文件來源', doc_attachment: '文件圖檔', doc_attachment_captions: '圖說'};
-
-var _metaSky2Spec = {docFilename: 'filename', corpus: 'corpus', docCompilation: 'compilation_name', docTitleXml: 'title', docAuthor: 'author', docTopicL1: 'doc_topic_l1', docTopicL2: 'doc_topic_l2', docTopicL3: 'doc_topic_l3', geoLevel1: 'geo_level1', geoLevel2: 'geo_level2', geoLevel3: 'geo_level3', geoX: 'geo_longitude', geoY: 'geo_latitude', docCategoryL1: 'doc_category_l1', docCategoryL2: 'doc_category_l2', docCategoryL3: 'doc_category_l3', docClass: 'docclass', docSubclass: 'docclass_aux', docType: 'doctype', docSubtype: 'doctype_aux', docBookCode: 'book_code', dateOrigStr: 'time_orig_str', dateAdDate: 'time_varchar', dateChNormYear: 'time_norm_year', dateEra: 'time_era', dateEmperorTitle: 'time_norm_kmark', dateAdYear: 'year_for_grouping', dateDynasty: 'time_dynasty', timeseqNotBefore: 'timeseq_not_before', timeseqNotAfter: 'timeseq_not_after', docSource: 'doc_source', docAttachmentList: 'doc_attachment', docAttachmentCaptions: 'doc_attachment_captions'};
-
-var _metaLocal2Spec = {era: 'time_era'};
+var _metadata, _metaSky2Spec, _metaLocal2Spec;
+$.getJSON('js/meta.json', function(result) {
+	_metadata = result['meta2ch'];
+	_metaSky2Spec = result['sky2meta'];
+	_metaLocal2Spec = result['local2meta'];
+});
 
 
 // * * * * * * * * * * * * * * * * data structures * * * * * * * * * * * * * * * * *
@@ -159,17 +160,19 @@ $(document).ready(function() {
 	// load source
 	if (_url.searchParams.has('public')) {
 		if (_url.searchParams.get('public') == '春秋三傳') {
+			$('head title').empty();
+			$('head title').append('春秋三傳對讀系統');
+			$('#navTitle').empty();
+			$('#navTitle').append('春秋三傳對讀系統');
 			$('.explainInterface').load('html/exp_chunqiu.html');
-			_projPara['meta'] = 'title';
-			_projPara['align'] = 'Time';
 		}
 
-		$('html').append('<script src="js/display_proj.js"></script>');
+		$('html').append('<script src="js/proj.js"></script>');
 		displayDefault();
 
 	} else {
 		$('.explainInterface').load('html/exp_general.html');
-		$('html').append('<script src="js/display.js"></script>');
+		$('html').append('<script src="js/general.js"></script>');
 	}
 });
 

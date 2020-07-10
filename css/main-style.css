@@ -1,3 +1,12 @@
+@font-face {
+	font-family: msjh;
+	src: url("../assets/msjh.eot"),
+		 url("../assets/msjh.woff") format("woff"), 
+		 url("../assets/msjh.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
 html {
 	height: 100%;
 }
@@ -6,6 +15,11 @@ body {
 	height: 100%;
 	position: relative;
 	margin: 0 auto;
+	font-family: msjh, sans-serif!important;
+}
+
+h1, h2, h3 {
+	font-weight: bold!important;
 }
 
 p {
@@ -47,12 +61,14 @@ span ~ div:first-of-type,
 	display: grid;
 	align-items: center;
 	text-align: center;
+	font-size: x-large;
 }
 
 .textBlock {
 	margin: 1% 4%;
 	padding: 1%;
 	border-radius: 10px;
+	font-size: medium;
 }
 
 .metadataBlock {
@@ -61,6 +77,7 @@ span ~ div:first-of-type,
 	border-radius: 10px;
 	background-color: #7D95AD;
 	color: white;
+	font-size: medium;
 }
 
 .metadataBlock ul {
@@ -94,6 +111,7 @@ span ~ div:first-of-type,
 	display: grid;
 	grid-template-columns: repeat(1, 1fr);
 	grid-column-gap: 1%;
+	font-size: 
 }
 
 .compareTitleBlock h1 {
@@ -260,6 +278,7 @@ span ~ div:first-of-type,
 .explainTable, .explainContent {
 	background-color: white;
 	overflow: scroll;
+	font-size: medium;
 }
 
 .explainInterface h2 {
@@ -299,6 +318,10 @@ span ~ div:first-of-type,
 
 .explainContent > div {
 	margin: 0 2%;
+}
+
+.explainContent h4 {
+	font-weight: bold;
 }
 
 .textandimage {

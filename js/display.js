@@ -9,9 +9,9 @@ highlight the hit block
 INPUT: 1) string, selector keyword
        2) string, HEX of color that be changed
 --- */
-function changeContentBlockColor($selector, $color) {
+function changeContentBlockColor($selector, $color, $className) {
 	$($selector).css('background-color', $color);
-	$($selector).attr('class', $($selector).attr("class") + " tagged");
+	$($selector).attr('class', $className);
 }
 
 
@@ -28,48 +28,13 @@ function cleanContentBlockColor($range) {
 }
 
 
-/* ---
-update the whole page
---- */
-function displayAll() {
-
-	// get information
-	var firstCorpus = getFirstCorpus();
-	var firstAlignType = getFirstAlignType();
-	if (firstCorpus === 'error') alert("[Error] 存取文獻集名稱錯誤，請洽工程師。");
-	if (firstAlignType === 'error') alert("[Error] 存取段落對讀設定錯誤，請洽工程師。");
-
-	// display
-	displayDocuManager();
-	displayMetadataList('filename');
-	displayAlignTypeList(firstAlignType);
-	displaySearchCorpus(firstCorpus);
-	displaySearchMode('DocOrder');
-	displayCompareContent('filename', firstAlignType);
-}
+// displayAll
 
 
 // * * * * * * * * * * * * * * * * control board * * * * * * * * * * * * * * * * *
 
 
-/* ---
-compare - document management block
---- */
-function displayDocuManager() {
-
-	// clear
-	$(".controlContentBlock[id=compare-manage] > ol").empty();
-
-	// show each corpus
-	for (let corpusName in _dataset) {
-		if (typeof _dataset[corpusName] !== 'object') continue;
-		let manageItem = "<li name=\"" + corpusName + "\">" + corpusName + "</li>";
-		let className = (_dataset[corpusName].isShow) ?"glyphicon-eye-open" :"glyphicon-eye-close";
-		let hideBtn = "<span class=\"glyphicon " + className + "\" name=\"" + corpusName + "\" onclick=\"hideOrShowCorpus(this, '"+corpusName+"')\"></span>";
-		let deleteBtn = "<span class=\"glyphicon glyphicon-trash\" name=\"" + corpusName + "\" onclick=\"deleteCorpus('" + corpusName + "')\"></span>";
-		$(".controlContentBlock[id=compare-manage] > ol").append(manageItem + hideBtn + deleteBtn);
-	}
-}
+// displayDocuManager
 
 
 /* ---

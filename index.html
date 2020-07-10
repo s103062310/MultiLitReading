@@ -15,10 +15,10 @@
 	<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-	<!-- DOCUSKY WIDGET API -->
-	<script src="https://docusky.org.tw/docusky/js/jquery.min.js"></script>
-	<script src="https://docusky.org.tw/docusky/js/jquery-ui.min.js"></script>
-	<script src="https://docusky.org.tw/docusky/js.ui/docusky.ui.getDbCorpusDocumentsSimpleUI.js"></script>
+	<!-- DOCUSKY WIDGET API: https://docusky.org.tw/Docusky v.s. ../.. -->
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/jquery-ui.min.js"></script>
+	<script src="../../js.ui/docusky.ui.getDbCorpusDocumentsSimpleUI.js"></script>
 </head>
 
 <body>
@@ -44,7 +44,7 @@
 			<div class="tabBtn">
 				<a href="#compareTab">對讀</a>
 				<a href="#searchTab">檢索</a>
-				<a href="#explainTab">說明</a>
+				<a href="#explainTab" onclick="toggleControlBoard('close')">說明</a>
 			</div>
 
 			<!-- tab content -->
@@ -190,6 +190,7 @@
 
 <!-- JAVASCRIPT FILE -->
 <script src="js/globalVar.js"></script>
+<script src="js/display.js"></script>
 <script src="js/fileLoading.js"></script>
 <script src="js/parsing.js"></script>
 <script src="js/checkergetter.js"></script>

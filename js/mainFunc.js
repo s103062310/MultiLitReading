@@ -64,58 +64,67 @@ function move($info, $type) {
 	var corpusArray = $('.corpusBlock');
 
 	// click on blue block: find correspond block
-	if ($info.className === $type.className){
-
-		// update color
+	if ($info.className === $type.className) {
 		cleanContentBlockColor('.compareInterface');
-		changeContentBlockColor('.' + $type.className + '[' + $type.alignStr + '=\"' + $info.id + '\"]', $type.highlightColor);
-		changeContentBlockColor('.compareInterface .' + $type.className + '[key=' + $info.key + ']', $type.targetColor);
-
-		// scroll self
-		scrollTo('.corpusBlock[name=\"' + $info.corpusName + '\"]', '.compareInterface .' + $type.className + '[key=' + $info.key + ']', true);
 
 		// scan all other corpus
-		for(let i=0; i<corpusArray.length; i++) {
+		for (let i=0; i<corpusArray.length; i++) {
+			let target = true;
 			let corpusName = $(corpusArray[i]).attr('name');
+			let blocks = $(corpusArray[i]).find('.' + $type.className);
 
-			// skip self
-			if (corpusName !== $info.corpusName) {
-				let blocks = $('.corpusBlock[name=\"' + corpusName + '\"] .' + $type.className + '[' + $type.alignStr + '=\"' + $info.id + '\"]');
-				
-				// change color and scroll for tartet in each corpus
-				if (blocks.length > 0) {
-					let targetKey = $(blocks[0]).attr('key');
-					changeContentBlockColor('.compareInterface .' + $type.className + '[key=' + targetKey + ']', $type.targetColor);
-					scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.compareInterface .' + $type.className + '[key=' + targetKey + ']', true);
-				}
+			// each titleBlock/textBlock
+			for (let j=0; j<blocks.length; j++) {
+				let id = $(blocks[j]).attr($type.alignStr);
+				let key = $(blocks[j]).attr('key');
+
+				// highlight and scroll
+				if (mapped(id, $info.id)) {
+					let blockSelector = '.compareInterface .' + $type.className + '[key=' + key + ']';
+
+					// target: scroll
+					if ((key === $info.key) || (corpusName !== $info.corpusName && target)) {
+						changeContentBlockColor(blockSelector, $type.targetColor, $type.className + ' tagged tagged');
+						scrollTo('.corpusBlock[name="' + corpusName + '"]', blockSelector, true);
+						target = false;
+
+					// others
+					} else changeContentBlockColor(blockSelector, $type.highlightColor, $type.className + ' tagged');
+				} 
 			}
 		}
 
 	// click on yellow block: change target block
 	} else if ($info.className === $type.className + ' tagged') {
 
-		// update color
-		cleanContentBlockColor('.corpusBlock[name=\"' + $info.corpusName + '\"]');
-		changeContentBlockColor('.corpusBlock[name=\"' + $info.corpusName + '\"] .' + $type.className + '[' + $type.alignStr + '=\"' + $info.id + '\"]', $type.highlightColor);
-		changeContentBlockColor('.compareInterface .' + $type.className + '[key=' + $info.key + ']', $type.targetColor);
-
-		// scroll self
-		scrollTo('.corpusBlock[name=\"' + $info.corpusName + '\"]', '.compareInterface .' + $type.className + '[key=' + $info.key + ']', true);
-
-		// scroll others
-		for(let i=0; i<corpusArray.length; i++) {
+		// scan all other corpus
+		for (let i=0; i<corpusArray.length; i++) {
 			let corpusName = $(corpusArray[i]).attr('name');
+			let blocks = $(corpusArray[i]).find('.tagged');
 
-			// skip self
-			if (corpusName !== $info.corpusName) {
+			// change color and scroll
+			if (corpusName === $info.corpusName) {
 
-				// find highlight blocks
-				let blocks = $('.corpusBlock[name=\"' + corpusName + '\"] .' + $type.className + '[' + $type.alignStr + '=\"' + $info.id + '\"]');
+				// red -> yellow
 				for (let j=0; j<blocks.length; j++) {
-
-					// find red block
 					if (blocks[j].className === $type.className + ' tagged tagged') {
-						scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.compareInterface .' + $type.className + '[key=' + $(blocks[j]).attr('key') + ']', true);
+						let blockSelector = '.compareInterface .' + $type.className + '[key=' + $(blocks[j]).attr('key') + ']';
+						changeContentBlockColor(blockSelector, $type.highlightColor, $type.className + ' tagged');
+						break;
+					}
+				}
+
+				// yellow -> red
+				let blockSelector = '.compareInterface .' + $type.className + '[key=' + $info.key + ']';
+				changeContentBlockColor(blockSelector, $type.targetColor, $type.className + ' tagged tagged');
+				scrollTo('.corpusBlock[name="' + corpusName + '"]', blockSelector, true);
+
+			// reset target position
+			} else {
+				for (let j=0; j<blocks.length; j++) {
+					if (blocks[j].className === $type.className + ' tagged tagged') {
+						let blockSelector = '.compareInterface .' + $type.className + '[key=' + $(blocks[j]).attr('key') + ']';
+						scrollTo('.corpusBlock[name="' + corpusName + '"]', blockSelector, true);
 						break;
 					}
 				}
@@ -125,38 +134,68 @@ function move($info, $type) {
 	// click on red block: find next block
 	} else if ($info.className === $type.className + ' tagged tagged') {
 
-		// scroll self
-		scrollTo('.corpusBlock[name=\"' + $info.corpusName + '\"]', '.compareInterface .' + $type.className + '[key=' + $info.key + ']', true);
-
 		// scan all other corpus
 		for (let i=0; i<corpusArray.length; i++) {
 			let corpusName = $(corpusArray[i]).attr('name');
+			let blocks = $(corpusArray[i]).find('.tagged');
 
-			// skip self
-			if (corpusName !== $info.corpusName) {
+			// reset target position
+			if (corpusName === $info.corpusName) {
+				let blockSelector = '.compareInterface .' + $type.className + '[key=' + $info.key + ']';
+				scrollTo('.corpusBlock[name="' + corpusName + '"]', blockSelector, true);
 
-				// find highlight blocks
-				let blocks = $('.corpusBlock[name=\"' + corpusName + '\"] .' + $type.className + '[' + $type.alignStr + '=\"' + $info.id + '\"]');
+			// find next target
+			} else {
 				for (let j=0; j<blocks.length; j++) {
-
-					// find red block and its next block
 					if (blocks[j].className === $type.className + ' tagged tagged') {
 
-						// reset color
-						cleanContentBlockColor('.corpusBlock[name=\"' + corpusName + '\"]');
-						changeContentBlockColor('.corpusBlock[name=\"' + corpusName + '\"] .' + $type.className + '[' + $type.alignStr + '=\"' + $info.id + '\"]', $type.highlightColor);
+						// red -> yellow
+						let blockSelector = '.compareInterface .' + $type.className + '[key=' + $(blocks[j]).attr('key') + ']';
+						changeContentBlockColor(blockSelector, $type.highlightColor, $type.className + ' tagged');
 
-						// target the next block
+						// yellow -> red
 						let index = (j + 1) % blocks.length;
-						let nextTargetKey = $(blocks[index]).attr('key');
-						changeContentBlockColor('.compareInterface .' + $type.className + '[key=' + nextTargetKey + ']', $type.targetColor);
-						scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.compareInterface .' + $type.className + '[key=' + nextTargetKey + ']', true);
-
+						blockSelector = '.compareInterface .' + $type.className + '[key=' + $(blocks[index]).attr('key') + ']';
+						changeContentBlockColor(blockSelector, $type.targetColor, $type.className + ' tagged tagged');
+						scrollTo('.corpusBlock[name="' + corpusName + '"]', blockSelector, true);
 						break;
 					}
 				}
 			}
 		}
+	}
+}
+
+
+/* ---
+judge if id correspond to each other
+INPUT: 1) block id
+	   2) clicked block id
+--- */
+function mapped($arg1, $arg2) {
+	var pos1 = $arg1.indexOf('[');
+	var pos2 = $arg1.indexOf(',');
+	var pos3 = $arg1.indexOf(']');
+
+	// range
+	if (pos1 > -1 && pos2 > pos1 && pos3 > pos2) {
+		let pos4 = $arg2.indexOf('[');
+		let pos5 = $arg2.indexOf(',');
+		let pos6 = $arg2.indexOf(']');
+
+		let arg1_l = parseInt($arg1.substring(pos1+1, pos2));
+		let arg1_h = parseInt($arg1.substring(pos2+1, pos3));
+		let arg2_l = parseInt($arg2.substring(pos4+1, pos5));
+		let arg2_h = parseInt($arg2.substring(pos5+1, pos6));
+
+		if (arg1_h < arg2_l) return false;
+		else if (arg2_h < arg1_l) return false;
+		else return true;
+
+	// single
+	} else {
+		if ($arg1 === $arg2) return true;
+		else return false;
 	}
 }
 
@@ -177,8 +216,8 @@ function jumpToBlock($key) {
 	scrollTo('.searchResult', '.searchResult .textBlock[key=' + $key + ']', true);
 
 	// update color
-	changeContentBlockColor('.searchInterface .textBlock[key=' + $key + ']', _color.highlightblock);
-	changeContentBlockColor('.searchItem[key=' + $key + ']', _color.highlightblock);
+	changeContentBlockColor('.searchInterface .textBlock[key=' + $key + ']', _color.highlightblock, 'textBlock tagged');
+	changeContentBlockColor('.searchItem[key=' + $key + ']', _color.highlightblock, 'searchItem tagged');
 }
 
 
@@ -198,7 +237,7 @@ function backToCompare($span) {
 	}
 
 	// maintainance of hide corpus
-	var corpusName = getActiveItemInList($('.controlContentBlock[id=search-corpus]'));
+	var corpusName = _para['corpus'];
 	var span = $('.glyphicon-eye-open[value=' + corpusName + ']');
 	if (_dataset[corpusName].isShow === false) hideOrShowCorpus(span[0], corpusName);
 	
@@ -209,7 +248,7 @@ function backToCompare($span) {
 	// back to default block
 	if (id === undefined) {
 		cleanContentBlockColor('.compareInterface');
-		changeContentBlockColor('.compareInterface .textBlock[key=' + key + ']', _color.highlighttarget);
+		changeContentBlockColor('.compareInterface .textBlock[key=' + key + ']', _color.highlighttarget, 'textBlock tagged tagged');
 		scrollTo('.corpusBlock[name=\"' + corpusName + '\"]', '.compareInterface .textBlock[key=' + key + ']', true);
 	}
 }

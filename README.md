@@ -8,6 +8,7 @@
 > 2020.02.22 | v.2.0  
 > 2020.05.14 | v.2.1, add: auto load database from url parameter  
 > 2020.05.23 | v.2.2, mod: UI for project  
+> 2020.07.14 | v.2.3, add: id for representing range and update explanation
 
 ## Example Directory
 Some example XML files that can be applied on this tool. You can:
